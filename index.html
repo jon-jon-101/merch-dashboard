@@ -421,7 +421,7 @@ let failedStores = new Map();
 
 function csvUrl(sheet, useProxy = false) {
   // gviz/tq works with "Anyone with link can view" without requiring login
-  const direct = `https://docs.google.com/spreadsheets/d/1_SgvYLk3X8FN27cg9cttPIrd7L5MQAzpt3gK0QR9dn8/edit?gid=1773493451#gid=1773493451{encodeURIComponent(sheet)}`;
+  const direct = `https://docs.google.com/spreadsheets/d/1_SgvYLk3X8FN27cg9cttPIrd7L5MQAzpt3gK0QR9dn8/edit?gid=1773493451#gid=1773493451`;
   if (useProxy) {
     // CORS proxy fallback — allorigins.win is free, open source, logs nothing
     return `https://api.allorigins.win/raw?url=${encodeURIComponent(direct)}`;
