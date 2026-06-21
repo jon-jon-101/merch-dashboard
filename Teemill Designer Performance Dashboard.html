@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)file:///Users/jonwells/Downloads/teemill-dashboard_3.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teemill Designer Performance Dashboard</title>
+<style>
+  :root {
+    --bg:        #F7F7F5;
+    --surface:   #FFFFFF;
+    --border:    #E4E4E0;
+    --border2:   #CECECA;
+    --text:      #1A1A18;
+    --text2:     #6B6B66;
+    --text3:     #9B9B96;
+    --blue:      #2563EB;
+    --blue-bg:   #EEF4FF;
+    --blue-txt:  #1D4ED8;
+    --green:     #16A34A;
+    --green-bg:  #DCFCE7;
+    --green-txt: #15803D;
+    --amber-bg:  #FEF3C7;
+    --amber-txt: #92400E;
+    --red-bg:    #FEE2E2;
+    --red-txt:   #991B1B;
+    --coral-bg:  #FFF0EC;
+    --coral-txt: #8A2F14;
+    --gold-bg:   #FFF8EC;
+    --gold-txt:  #7A4F00;
+    --radius:    8px;
+    --radius-sm: 5px;
+    --shadow:    0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 14px; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* ── PASSWORD SCREEN ── */
+  #lockScreen {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; background: var(--bg);
+  }
+  .lock-card {
+    background: var(--surface); border-radius: 12px; box-shadow: var(--shadow);
+    border: 1px solid var(--border); padding: 2.5rem 2rem; width: 340px; text-align: center;
+  }
+  .lock-logo { font-size: 28px; margin-bottom: 1rem; }
+  .lock-title { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 0.3rem; }
+  .lock-sub { font-size: 13px; color: var(--text2); margin-bottom: 1.5rem; }
+  .lock-input {
+    width: 100%; padding: 10px 14px; border: 1px solid var(--border2); border-radius: var(--radius-sm);
+    font-size: 14px; background: var(--bg); color: var(--text); margin-bottom: 0.75rem; outline: none;
+    transition: border-color .15s;
+  }
+  .lock-input:focus { border-color: var(--blue); }
+  .lock-btn {
+    width: 100%; padding: 10px; border: none; border-radius: var(--radius-sm);
+    background: var(--blue); color: #fff; font-size: 14px; font-weight: 500;
+    cursor: pointer; transition: opacity .15s;
+  }
+  .lock-btn:hover { opacity: .88; }
+  .lock-error { font-size: 12px; color: var(--red-txt); margin-top: 0.5rem; display: none; }
+
+  /* ── DASHBOARD ── */
+  #dashboard { display: none; }
+  .topbar {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 0 1.5rem; height: 52px; display: flex; align-items: center;
+    justify-content: space-between; position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .topbar-left { display: flex; align-items: center; gap: 10px; }
+  .topbar-logo { font-size: 18px; font-weight: 700; letter-spacing: -.4px; color: var(--text); }
+  .topbar-sub { font-size: 12px; color: var(--text3); }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .lock-out-btn {
+    font-size: 12px; color: var(--text2); background: none; border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 4px 10px; cursor: pointer; transition: background .12s;
+  }
+  .lock-out-btn:hover { background: var(--bg); }
+
+  .main { padding: 1.25rem 1.5rem; max-width: 1600px; margin: 0 auto; }
+
+  /* ── FILTERS ── */
+  .filters {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1rem;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: .85rem 1rem; align-items: flex-end;
+  }
+  .fg { display: flex; flex-direction: column; gap: 4px; }
+  .fg label { font-size: 10px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .05em; }
+  .fg select, .fg input[type="date"] {
+    font-size: 12px; padding: 5px 8px; border: 1px solid var(--border2); border-radius: var(--radius-sm);
+    background: var(--bg); color: var(--text); min-width: 130px; outline: none; transition: border-color .12s;
+  }
+  .fg select:focus, .fg input:focus { border-color: var(--blue); }
+  .reset-btn {
+    font-size: 11px; padding: 5px 12px; border: 1px solid var(--border2);
+    border-radius: var(--radius-sm); background: var(--bg); color: var(--text2);
+    cursor: pointer; transition: all .12s; white-space: nowrap; margin-top: 18px;
+  }
+  .reset-btn:hover { background: var(--blue-bg); border-color: var(--blue); color: var(--blue-txt); }
+
+  /* ── WINDOW BADGE ── */
+  .window-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--blue-bg); color: var(--blue-txt); border-radius: 100px;
+    padding: 4px 12px; font-size: 11px; font-weight: 500; margin-bottom: 1rem;
+    border: 1px solid #BFDBFE;
+  }
+
+  /* ── STATUS BAR ── */
+  .status-bar {
+    font-size: 11px; color: var(--text2); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); display: inline-block; }
+  .status-dot.loading { background: var(--amber-txt); animation: pulse 1s infinite; }
+  .status-dot.error { background: var(--red-txt); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  /* ── KPI GRID ── */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 1.25rem; }
+  .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: .85rem 1rem; }
+  .kpi.hi { border-color: var(--blue); background: var(--blue-bg); }
+  .kpi-label { font-size: 10px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; line-height: 1.4; }
+  .kpi-val { font-size: 22px; font-weight: 600; color: var(--text); line-height: 1.1; }
+  .kpi.hi .kpi-val { color: var(--blue-txt); }
+  .kpi-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 1.5rem; }
+  .sec-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .sec-title { font-size: 11px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: .06em; }
+  .sec-note { font-size: 11px; color: var(--text3); }
+
+  /* ── TABLE WRAPPER ── */
+  .tcard {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: auto; box-shadow: var(--shadow);
+  }
+
+  /* ── DESIGNER TABLE ── */
+  .dtbl { width: 100%; border-collapse: collapse; font-size: 11.5px; white-space: nowrap; }
+
+  /* Group header */
+  .dtbl thead tr.grp th {
+    padding: 6px 10px; font-size: 10px; font-weight: 700; text-align: center;
+    text-transform: uppercase; letter-spacing: .06em; border-bottom: 1px solid var(--border);
+  }
+  .grp-id   { background: var(--bg);       color: var(--text2); }
+  .grp-£    { background: var(--blue-bg);  color: var(--blue-txt); border-left: 2px solid #BFDBFE; }
+  .grp-out  { background: var(--green-bg); color: var(--green-txt); border-left: 2px solid #BBF7D0; }
+  .grp-kp   { background: var(--coral-bg); color: var(--coral-txt); border-left: 2px solid #FECACA; }
+  .grp-opt  { background: var(--gold-bg);  color: var(--gold-txt); border-left: 2px solid #FDE68A; }
+
+  /* Column header */
+  .dtbl thead tr.cols th {
+    background: var(--bg); color: var(--text2); font-weight: 600;
+    padding: 7px 10px; text-align: center; font-size: 10px; font-weight: 600;
+    border-bottom: 1px solid var(--border); cursor: pointer;
+    vertical-align: bottom; line-height: 1.35; user-select: none;
+    transition: color .1s;
+  }
+  .dtbl thead tr.cols th:hover { color: var(--text); }
+  .dtbl thead tr.cols th.left { text-align: left; }
+  .dtbl thead tr.cols th.grp-£-col  { border-left: 2px solid #BFDBFE; }
+  .dtbl thead tr.cols th.grp-out-col { border-left: 2px solid #BBF7D0; }
+  .dtbl thead tr.cols th.grp-kp-col  { border-left: 2px solid #FECACA; }
+  .dtbl thead tr.cols th.grp-opt-col { border-left: 2px solid #FDE68A; }
+
+  /* Body */
+  .dtbl tbody td {
+    padding: 7px 10px; border-bottom: 1px solid var(--border);
+    color: var(--text); vertical-align: middle; text-align: center;
+  }
+  .dtbl tbody td.left { text-align: left; }
+  .dtbl tbody tr:last-child td { border-bottom: none; }
+  .dtbl tbody tr:hover td { background: var(--bg); }
+  .dtbl tbody td.grp-£-col  { border-left: 2px solid #BFDBFE;  background: rgba(37,99,235,0.02); }
+  .dtbl tbody td.grp-out-col { border-left: 2px solid #BBF7D0; background: rgba(22,163,74,0.02); }
+  .dtbl tbody td.grp-kp-col  { border-left: 2px solid #FECACA; background: rgba(212,83,126,0.02); }
+  .dtbl tbody td.grp-opt-col { border-left: 2px solid #FDE68A; background: rgba(186,117,23,0.02); }
+
+  /* ── BADGES ── */
+  .badge { display: inline-block; padding: 2px 7px; border-radius: 100px; font-size: 10px; font-weight: 600; }
+  .b-green  { background: var(--green-bg);  color: var(--green-txt); }
+  .b-amber  { background: var(--amber-bg);  color: var(--amber-txt); }
+  .b-red    { background: var(--red-bg);    color: var(--red-txt); }
+  .b-blue   { background: var(--blue-bg);   color: var(--blue-txt); }
+  .b-store  { background: var(--bg); color: var(--text2); border: 1px solid var(--border); font-size: 10px; }
+
+  /* ── RANK ── */
+  .rank {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--bg); color: var(--text2);
+    font-size: 10px; font-weight: 700;
+  }
+  .rank.r1 { background: #FEF3C7; color: #92400E; }
+  .rank.r2 { background: #F1F5F9; color: #475569; }
+  .rank.r3 { background: #FEF0E7; color: #9A3412; }
+
+  /* ── PLACEHOLDER ── */
+  .ph { color: var(--text3); font-style: italic; }
+
+  /* ── SORT ARROW ── */
+  .sa { opacity: .35; font-size: 9px; }
+  .sa.on { opacity: 1; }
+
+  /* ── REV BAR ── */
+  .rev-bar-wrap { display: flex; align-items: center; gap: 6px; }
+  .rev-bar-bg { flex: 1; height: 4px; background: var(--border); border-radius: 2px; min-width: 30px; overflow: hidden; }
+  .rev-bar-fill { height: 100%; border-radius: 2px; background: var(--blue); }
+
+  /* ── EMPTY STATE ── */
+  .empty { padding: 2.5rem; text-align: center; color: var(--text3); font-size: 13px; }
+
+  /* ── FOOTER NOTE ── */
+  .foot-note { font-size: 10px; color: var(--text3); margin-top: 6px; font-style: italic; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 700px) {
+    .main { padding: .75rem; }
+    .topbar { padding: 0 .75rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     PASSWORD SCREEN
+══════════════════════════════════════ -->
+<div id="lockScreen" style="display: none;">
+  <div class="lock-card">
+    <div class="lock-logo">🧵</div>
+    <div class="lock-title">Teemill Dashboard</div>
+    <div class="lock-sub">Enter the password to continue</div>
+    <input class="lock-input" type="password" id="pwInput" placeholder="Password" autocomplete="current-password">
+    <button class="lock-btn" onclick="checkPassword()">Unlock</button>
+    <div class="lock-error" id="pwError">Incorrect password. Please try again.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     DASHBOARD
+══════════════════════════════════════ -->
+<div id="dashboard" style="display: block;">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="topbar-logo">🧵 Teemill</span>
+      <span class="topbar-sub">Designer Performance Dashboard</span>
+    </div>
+    <div class="topbar-right">
+      <span id="lastRefreshed" style="font-size:11px;color:var(--text3)">Refreshed 13:45</span>
+      <button class="lock-out-btn" onclick="lockOut()">🔒 Lock</button>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- FILTERS -->
+    <div class="filters">
+      <div class="fg">
+        <label>Store</label>
+        <select id="fStore">
+          <option value="all">All stores</option>
+          <option value="Shark Trust">Shark Trust</option>
+          <option value="Wallace &amp; Gromit">Wallace &amp; Gromit</option>
+          <option value="BBC Earth">BBC Earth</option>
+          <option value="Music Declares Emergency">Music Declares Emergency</option>
+          <option value="Sea Shepherd Global">Sea Shepherd Global</option>
+          <option value="Wildlife Trusts">Wildlife Trusts</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Designer</label>
+        <select id="fDesigner"><option value="all">All designers</option><option value="Unknown">Unknown</option></select>
+      </div>
+      <div class="fg">
+        <label>Window — created from</label>
+        <input type="date" id="fFrom">
+      </div>
+      <div class="fg">
+        <label>Window — created to</label>
+        <input type="date" id="fTo">
+      </div>
+      <button class="reset-btn" onclick="resetYTD()">↺ Reset to YTD</button>
+    </div>
+
+    <div class="window-badge" id="windowBadge">📅 Year to date — 1 Jan 2026 → 19 Jun 2026</div>
+
+    <!-- STATUS -->
+    <div class="status-bar">
+      <span class="status-dot error" id="statusDot"></span>
+      <span id="statusText">Could not load any stores. Check the sheet is set to "Anyone with link can view". Detail: Shark Trust: Could not fetch "Shark Trust" — check the sheet tab name matches exactly and sheet is public | Wallace &amp; Gromit: Could not fetch "Wallace &amp; Gromit" — check the sheet tab name matches exactly and sheet is public | BBC Earth: Could not fetch "BBC Earth" — check the sheet tab name matches exactly and sheet is public | Music Declares Emergency: Could not fetch "Music Declares Emergency" — check the sheet tab name matches exactly and sheet is public | Sea Shepherd Global: Could not fetch "Sea Shepherd Global" — check the sheet tab name matches exactly and sheet is public | Wildlife Trusts: Could not fetch "Wildlife Trusts" — check the sheet tab name matches exactly and sheet is public</span>
+    </div>
+
+    <!-- KPI ROW -->
+    <div class="kpi-grid" id="kpiGrid"><div class="kpi hi">
+    <div class="kpi-label">Designs in window</div>
+    <div class="kpi-val">0</div>
+    <div class="kpi-sub">0 stores</div>
+  </div><div class="kpi hi">
+    <div class="kpi-label">With 1+ sale</div>
+    <div class="kpi-val">0</div>
+    <div class="kpi-sub">0.0% of window</div>
+  </div><div class="kpi">
+    <div class="kpi-label">Revenue (window designs)</div>
+    <div class="kpi-val">£0</div>
+    <div class="kpi-sub">shown products only</div>
+  </div><div class="kpi">
+    <div class="kpi-label">Avg CVR (window)</div>
+    <div class="kpi-val">0.00%</div>
+    <div class="kpi-sub">mean across products</div>
+  </div><div class="kpi">
+    <div class="kpi-label">% designs AI generated</div>
+    <div class="kpi-val" style="font-size:16px;color:var(--text3);font-style:italic">—</div>
+    <div class="kpi-sub">column not yet in sheet</div>
+  </div></div>
+
+    <!-- DESIGNER TABLE -->
+    <div class="section">
+      <div class="sec-hdr">
+        <span class="sec-title">Designer performance <span id="desNote" style="font-weight:400;text-transform:none;opacity:.7">(0 designers with designs in window)</span></span>
+        <span class="sec-note" id="windowNote"></span>
+      </div>
+      <div class="tcard">
+        <table class="dtbl" id="desTable">
+          <thead>
+            <tr class="grp">
+              <th class="grp-id" colspan="2"></th>
+              <th class="grp-£" colspan="3">£</th>
+              <th class="grp-out" colspan="5">Output</th>
+              <th class="grp-kp" colspan="3">KP Opportunity</th>
+              <th class="grp-opt" colspan="3">Optimisation</th>
+            </tr>
+            <tr class="cols" id="colHeaders">
+              <th class="left" style="min-width:28px">#</th>
+              <th class="left" style="min-width:120px" onclick="dsrt(&#39;designer&#39;)">Designer <span class="sa" id="sa-designer">▼</span></th>
+
+              <th class="grp-£-col" style="min-width:105px" onclick="dsrt(&#39;totalRev&#39;)">Total Revenue <span class="sa on" id="sa-totalRev">▼</span></th>
+              <th class="grp-£-col" style="min-width:80px" onclick="dsrt(&#39;pctAIRev&#39;)">% rev from<br>AI designs <span class="sa" id="sa-pctAIRev">▼</span></th>
+              <th class="grp-£-col" style="min-width:85px" onclick="dsrt(&#39;avgRev&#39;)">AVG Rev/<br>Design <span class="sa" id="sa-avgRev">▼</span></th>
+
+              <th class="grp-out-col" style="min-width:75px" onclick="dsrt(&#39;designs&#39;)">Total no.<br>of designs <span class="sa" id="sa-designs">▼</span></th>
+              <th class="grp-out-col" style="min-width:65px" onclick="dsrt(&#39;pctAI&#39;)">% AI<br>designs <span class="sa" id="sa-pctAI">▼</span></th>
+              <th class="grp-out-col" style="min-width:75px" onclick="dsrt(&#39;pctSales&#39;)">% with<br>&gt;1 sale <span class="sa" id="sa-pctSales">▼</span></th>
+              <th class="grp-out-col" style="min-width:85px" onclick="dsrt(&#39;avgDesPerWeek&#39;)">Avg designs<br>per week <span class="sa" id="sa-avgDesPerWeek">▼</span></th>
+              <th class="grp-out-col" style="min-width:70px" onclick="dsrt(&#39;avgCvr&#39;)">Avg CVR% <span class="sa" id="sa-avgCvr">▼</span></th>
+
+              <th class="grp-kp-col" style="min-width:95px" onclick="dsrt(&#39;monthlyOpp&#39;)">£ monthly opp<br>remaining <span class="sa" id="sa-monthlyOpp">▼</span></th>
+              <th class="grp-kp-col" style="min-width:80px" onclick="dsrt(&#39;pctOppComplete&#39;)">% opps<br>complete <span class="sa" id="sa-pctOppComplete">▼</span></th>
+              <th class="grp-kp-col" style="min-width:80px" onclick="dsrt(&#39;timeToComplete&#39;)">Time to<br>complete <span class="sa" id="sa-timeToComplete">▼</span></th>
+
+              <th class="grp-opt-col" style="min-width:75px" onclick="dsrt(&#39;noIssues&#39;)">No. products<br>w/ issues <span class="sa" id="sa-noIssues">▼</span></th>
+              <th class="grp-opt-col" style="min-width:75px" onclick="dsrt(&#39;pctIssues&#39;)">% products<br>w/ issues <span class="sa" id="sa-pctIssues">▼</span></th>
+              <th class="grp-opt-col" style="min-width:65px" onclick="dsrt(&#39;avgPcr&#39;)">Avg PCR <span class="sa" id="sa-avgPcr">▼</span></th>
+            </tr>
+          </thead>
+          <tbody id="dBody"><tr><td colspan="16" class="empty">No designers had designs created in this window.</td></tr></tbody>
+        </table>
+      </div>
+      <p class="foot-note">— = data not yet available in export &nbsp;·&nbsp; Window filters designs by creation date &nbsp;·&nbsp; Data loads live from Google Sheets</p>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /dashboard -->
+
+<script>
+// ══════════════════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════════════════
+const SHEET_ID = "1_SgvYLk3X8FN27cg9cttPIrd7L5MQAzpt3gK0QR9dn8";
+const PASSWORD = "teemill2026";   // ← change this to whatever password you want
+
+const STORES = [
+  "Shark Trust",
+  "Wallace & Gromit",
+  "BBC Earth",
+  "Music Declares Emergency",
+  "Sea Shepherd Global",
+  "Wildlife Trusts"
+];
+
+const TODAY     = new Date();
+const YTD_START = `${TODAY.getFullYear()}-01-01`;
+const YTD_END   = TODAY.toISOString().slice(0,10);
+
+// ══════════════════════════════════════════════════════
+// PASSWORD
+// ══════════════════════════════════════════════════════
+function checkPassword() {
+  const val = document.getElementById("pwInput").value;
+  if (val === PASSWORD) {
+    document.getElementById("lockScreen").style.display = "none";
+    document.getElementById("dashboard").style.display  = "block";
+    init();
+  } else {
+    document.getElementById("pwError").style.display = "block";
+    document.getElementById("pwInput").value = "";
+    document.getElementById("pwInput").focus();
+  }
+}
+document.getElementById("pwInput").addEventListener("keydown", e => { if (e.key === "Enter") checkPassword(); });
+
+function lockOut() {
+  document.getElementById("dashboard").style.display  = "none";
+  document.getElementById("lockScreen").style.display = "flex";
+  document.getElementById("pwInput").value = "";
+  document.getElementById("pwError").style.display = "none";
+}
+
+// ══════════════════════════════════════════════════════
+// DATA LAYER
+// ══════════════════════════════════════════════════════
+let allProducts = []; // [{store, designer, revenue, sales, cr, traffic, basketRate, createdAt}]
+let loadedStores = new Set();
+let failedStores = new Map();
+
+function csvUrl(sheet, useProxy = false) {
+  // gviz/tq works with "Anyone with link can view" without requiring login
+  const direct = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheet)}`;
+  if (useProxy) {
+    // CORS proxy fallback — allorigins.win is free, open source, logs nothing
+    return `https://api.allorigins.win/raw?url=${encodeURIComponent(direct)}`;
+  }
+  return direct;
+}
+
+function parseCSV(text) {
+  const lines = text.trim().split("\n");
+  if (lines.length < 2) return [];
+  // Parse header
+  const headers = parseCSVRow(lines[0]).map(h => h.trim());
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const vals = parseCSVRow(lines[i]);
+    const obj = {};
+    headers.forEach((h, idx) => { obj[h] = (vals[idx] || "").trim(); });
+    rows.push(obj);
+  }
+  return rows;
+}
+
+function parseCSVRow(line) {
+  const result = []; let cur = ""; let inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') { inQ = !inQ; }
+    else if (c === "," && !inQ) { result.push(cur); cur = ""; }
+    else { cur += c; }
+  }
+  result.push(cur);
+  return result;
+}
+
+function cleanNum(s) {
+  if (!s) return 0;
+  return parseFloat(s.replace(/[£,%\s]/g, "")) || 0;
+}
+
+function parseReviewScore(s) {
+  const m = (s || "").match(/([\d.]+)\s*\((\d+)\)/);
+  return m ? { score: parseFloat(m[1]), count: parseInt(m[2]) } : { score: 0, count: 0 };
+}
+
+async function loadStore(storeName) {
+  try {
+    // Try direct fetch first, fall back to CORS proxy if blocked
+    let text = null;
+    for (const useProxy of [false, true]) {
+      try {
+        const url = csvUrl(storeName, useProxy);
+        const res = await fetch(url, { redirect: "follow" });
+        if (!res.ok) continue;
+        const t = await res.text();
+        if (!t || t.trim() === "") continue;
+        if (t.includes("<!DOCTYPE") || t.includes("<html")) continue;
+        text = t;
+        break;
+      } catch(e) { continue; }
+    }
+    if (!text) throw new Error(`Could not fetch "${storeName}" — check the sheet tab name matches exactly and sheet is public`);
+    const rows = parseCSV(text);
+    const products = rows
+      .filter(r => r["Product Name"] || r["Product ID"])
+      .map(r => ({
+        store:      storeName,
+        name:       r["Product Name"] || "",
+        designer:   r["Created By"]   || "Unknown",
+        revenue:    cleanNum(r["Revenue"]),
+        sales:      Math.round(cleanNum(r["Sales"])),
+        cr:         cleanNum(r["Conversion Rate"]),
+        traffic:    Math.round(cleanNum(r["Traffic"])),
+        basketRate: cleanNum(r["Basket Rate"]),
+        createdAt:  (r["Created At"] || "").slice(0, 10),
+        updatedAt:  (r["Updated At"] || "").slice(0, 10),
+        aiGenerated: false, // placeholder — add "AI Generated" column to sheet when ready
+        merchIssue:  false, // placeholder — add "Merch Issue" column to sheet when ready
+      }))
+      .filter(p => p.createdAt); // must have a date
+    return products;
+  } catch(e) {
+    console.warn(`Failed to load "${storeName}":`, e.message);
+    return { error: e.message };
+  }
+}
+
+async function loadAllStores() {
+  setStatus("loading", "Loading data from Google Sheets…");
+  allProducts = [];
+  loadedStores = new Set();
+  failedStores = new Map();
+
+  const storeF = document.getElementById("fStore").value;
+  const toLoad = storeF === "all" ? STORES : [storeF];
+
+  const results = await Promise.all(toLoad.map(async s => ({ store: s, data: await loadStore(s) })));
+
+  results.forEach(({ store, data }) => {
+    if (data !== null && !data.error) { allProducts.push(...data); loadedStores.add(store); }
+    else { failedStores.set(store, data?.error || "Unknown error"); }
+  });
+
+  const now = new Date();
+  document.getElementById("lastRefreshed").textContent =
+    `Refreshed ${now.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}`;
+
+  if (failedStores.size === 0) {
+    setStatus("ok", `Loaded ${allProducts.length.toLocaleString()} products from ${loadedStores.size} store${loadedStores.size !== 1 ? "s" : ""}`);
+  } else if (loadedStores.size === 0) {
+    const errDetail = [...failedStores.entries()].map(([s,e]) => `${s}: ${e}`).join(" | ");
+    setStatus("error", `Could not load any stores. Check the sheet is set to "Anyone with link can view". Detail: ${errDetail}`);
+  } else {
+    setStatus("warn", `Loaded ${loadedStores.size} store${loadedStores.size !== 1?"s":""} · Failed: ${[...failedStores.keys()].join(", ")}`);
+  }
+
+  populateDesignerFilter();
+  render();
+}
+
+function setStatus(type, msg) {
+  const dot  = document.getElementById("statusDot");
+  const text = document.getElementById("statusText");
+  dot.className  = "status-dot" + (type === "loading" ? " loading" : type === "error" ? " error" : "");
+  if (type === "ok")   dot.style.background = "var(--green)";
+  if (type === "warn") dot.style.background = "var(--amber-txt)";
+  text.textContent = msg;
+}
+
+// ══════════════════════════════════════════════════════
+// FILTERS & HELPERS
+// ══════════════════════════════════════════════════════
+function getWindow() {
+  return {
+    from: document.getElementById("fFrom").value || YTD_START,
+    to:   document.getElementById("fTo").value   || YTD_END,
+  };
+}
+
+function resetYTD() {
+  document.getElementById("fFrom").value = YTD_START;
+  document.getElementById("fTo").value   = YTD_END;
+  render();
+}
+
+function weeksInWindow(from, to) {
+  return Math.max(1, Math.round((new Date(to) - new Date(from)) / (7 * 24 * 3600 * 1000)));
+}
+
+function populateDesignerFilter() {
+  const sel = document.getElementById("fDesigner");
+  const current = sel.value;
+  const storeF = document.getElementById("fStore").value;
+  const pool = storeF === "all" ? allProducts : allProducts.filter(p => p.store === storeF);
+  const designers = [...new Set(pool.map(p => p.designer))]
+    .filter(d => d !== "Unknown").sort();
+  sel.innerHTML = `<option value="all">All designers</option>` +
+    designers.map(d => `<option value="${d}"${d === current ? " selected" : ""}>${d}</option>`).join("") +
+    `<option value="Unknown">Unknown</option>`;
+}
+
+function getFilteredProducts() {
+  const storeF  = document.getElementById("fStore").value;
+  const desF    = document.getElementById("fDesigner").value;
+  const { from, to } = getWindow();
+  return allProducts.filter(p => {
+    if (storeF !== "all" && p.store !== storeF) return false;
+    if (desF   !== "all" && p.designer !== desF) return false;
+    if (p.createdAt < from || p.createdAt > to) return false;
+    return true;
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════════════
+function updateWindowBadge() {
+  const { from, to } = getWindow();
+  const isYTD = from === YTD_START && to === YTD_END;
+  const fmt = d => new Date(d + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  document.getElementById("windowBadge").innerHTML =
+    `📅 ${isYTD ? "Year to date — " : ""}${fmt(from)} → ${fmt(to)}`;
+}
+
+function renderKPIs(products) {
+  const totalDesigns  = products.length;
+  const withSales     = products.filter(p => p.sales > 0).length;
+  const totalRev      = products.reduce((a, p) => a + p.revenue, 0);
+  const pctSales      = totalDesigns ? ((withSales / totalDesigns) * 100).toFixed(1) : "0.0";
+  const avgCvr        = totalDesigns ? (products.reduce((a, p) => a + p.cr, 0) / totalDesigns).toFixed(2) : "0.00";
+  const storeF        = document.getElementById("fStore").value;
+  const storeLabel    = storeF === "all" ? `${loadedStores.size} stores` : storeF;
+
+  document.getElementById("kpiGrid").innerHTML = [
+    { l: "Designs in window",       v: totalDesigns.toLocaleString(), s: storeLabel, hi: true },
+    { l: "With 1+ sale",            v: withSales.toLocaleString(),    s: `${pctSales}% of window`, hi: true },
+    { l: "Revenue (window designs)",v: "£" + Math.round(totalRev).toLocaleString(), s: "shown products only" },
+    { l: "Avg CVR (window)",        v: avgCvr + "%", s: "mean across products" },
+    { l: "% designs AI generated",  v: "—", s: "column not yet in sheet", ph: true },
+  ].map(m => `<div class="kpi${m.hi ? " hi" : ""}">
+    <div class="kpi-label">${m.l}</div>
+    <div class="kpi-val${m.ph ? '" style="font-size:16px;color:var(--text3);font-style:italic' : ''}">${m.v}</div>
+    <div class="kpi-sub">${m.s}</div>
+  </div>`).join("");
+}
+
+// ── SORT STATE ──────────────────────────────────────
+let dSortCol = "totalRev";
+let dSortDir = -1;
+
+function dsrt(col) {
+  if (dSortCol === col) dSortDir *= -1;
+  else { dSortCol = col; dSortDir = -1; }
+  document.querySelectorAll("[id^='sa-']").forEach(el => { el.className = "sa"; el.textContent = "▼"; });
+  const el = document.getElementById("sa-" + col);
+  if (el) { el.className = "sa on"; el.textContent = dSortDir === -1 ? "▼" : "▲"; }
+  renderTable(getFilteredProducts());
+}
+
+function buildDesignerRows(products) {
+  const { from, to } = getWindow();
+  const weeks = weeksInWindow(from, to);
+  const dm = {};
+  products.forEach(p => {
+    if (!dm[p.designer]) dm[p.designer] = {
+      designer: p.designer, stores: new Set(),
+      totalRev: 0, designs: 0, withSales: 0, crSum: 0, aiCount: 0, issueCount: 0,
+    };
+    const d = dm[p.designer];
+    d.stores.add(p.store);
+    d.totalRev  += p.revenue;
+    d.designs   += 1;
+    d.withSales += p.sales > 0 ? 1 : 0;
+    d.crSum     += p.cr;
+    d.aiCount   += p.aiGenerated ? 1 : 0;
+    d.issueCount+= p.merchIssue  ? 1 : 0;
+  });
+
+  return Object.values(dm).map(d => ({
+    designer:      d.designer,
+    stores:        [...d.stores].sort(),
+    totalRev:      d.totalRev,
+    designs:       d.designs,
+    withSales:     d.withSales,
+    avgRev:        d.designs ? +(d.totalRev / d.designs).toFixed(2) : 0,
+    pctSales:      d.designs ? +((d.withSales / d.designs) * 100).toFixed(1) : 0,
+    avgCvr:        d.designs ? +(d.crSum / d.designs).toFixed(2) : 0,
+    avgDesPerWeek: +(d.designs / weeks).toFixed(1),
+    pctAI:         d.designs ? +((d.aiCount / d.designs) * 100).toFixed(1) : 0,
+    pctAIRev:      null, // needs AI revenue data
+    monthlyOpp:    null,
+    pctOppComplete:null,
+    timeToComplete:null,
+    noIssues:      d.issueCount || null,
+    pctIssues:     d.designs ? +((d.issueCount / d.designs) * 100).toFixed(1) : null,
+    avgPcr:        null,
+  }));
+}
+
+function renderTable(products) {
+  const rows = buildDesignerRows(products).sort((a, b) => {
+    let av = a[dSortCol], bv = b[dSortCol];
+    if (av === null && bv === null) return 0;
+    if (av === null) return 1; if (bv === null) return -1;
+    if (typeof av === "string") return dSortDir * av.localeCompare(bv);
+    return dSortDir * (av - bv);
+  });
+
+  document.getElementById("desNote").textContent =
+    `(${rows.length} designer${rows.length !== 1 ? "s" : ""} with designs in window)`;
+
+  if (rows.length === 0) {
+    document.getElementById("dBody").innerHTML =
+      `<tr><td colspan="16" class="empty">No designers had designs created in this window.</td></tr>`;
+    return;
+  }
+
+  const maxRev = Math.max(...rows.map(r => r.totalRev), 1);
+  const ph     = v => v === null ? `<span class="ph">—</span>` : v;
+  const phFmt  = v => v === null ? `<span class="ph">—</span>` : `£${Math.round(v).toLocaleString()}`;
+  const pctBadge = (v, hiThr = 60, loThr = 30) => v === null
+    ? `<span class="ph">—</span>`
+    : `<span class="badge ${v >= hiThr ? "b-green" : v >= loThr ? "b-amber" : "b-red"}">${v}%</span>`;
+
+  document.getElementById("dBody").innerHTML = rows.map((r, i) => {
+    const rankCls = i === 0 ? "r1" : i === 1 ? "r2" : i === 2 ? "r3" : "";
+    const storeBadges = r.stores.map(s =>
+      `<span class="badge b-store">${s}</span>`).join(" ");
+    const revPct = (r.totalRev / maxRev * 100).toFixed(1);
+
+    return `<tr>
+      <td class="left"><span class="rank ${rankCls}">${i + 1}</span></td>
+      <td class="left">
+        <div style="font-weight:600;margin-bottom:3px">${r.designer}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:3px">${storeBadges}</div>
+      </td>
+
+      <td class="grp-£-col">
+        <div class="rev-bar-wrap">
+          <span style="min-width:58px;font-weight:700;font-size:12px">£${Math.round(r.totalRev).toLocaleString()}</span>
+          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:${revPct}%"></div></div>
+        </div>
+      </td>
+      <td class="grp-£-col">${ph(r.pctAIRev)}</td>
+      <td class="grp-£-col" style="font-weight:600">£${r.avgRev.toFixed(2)}</td>
+
+      <td class="grp-out-col">${r.designs.toLocaleString()}</td>
+      <td class="grp-out-col">${r.pctAI > 0 ? `<span class="badge b-blue">${r.pctAI}%</span>` : `<span class="ph">—</span>`}</td>
+      <td class="grp-out-col">${pctBadge(r.pctSales)}</td>
+      <td class="grp-out-col">${r.avgDesPerWeek}</td>
+      <td class="grp-out-col">${r.avgCvr.toFixed(2)}%</td>
+
+      <td class="grp-kp-col">${phFmt(r.monthlyOpp)}</td>
+      <td class="grp-kp-col">${pctBadge(r.pctOppComplete)}</td>
+      <td class="grp-kp-col">${ph(r.timeToComplete)}</td>
+
+      <td class="grp-opt-col">${ph(r.noIssues)}</td>
+      <td class="grp-opt-col">${pctBadge(r.pctIssues, 20, 5)}</td>
+      <td class="grp-opt-col">${ph(r.avgPcr)}</td>
+    </tr>`;
+  }).join("");
+}
+
+function render() {
+  updateWindowBadge();
+  const products = getFilteredProducts();
+  renderKPIs(products);
+  renderTable(products);
+}
+
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+function init() {
+  // Set YTD defaults
+  document.getElementById("fFrom").value = YTD_START;
+  document.getElementById("fTo").value   = YTD_END;
+
+  // Wire up filter listeners
+  document.getElementById("fStore").addEventListener("change", () => {
+    loadAllStores(); // reload when store changes
+  });
+  ["fDesigner", "fFrom", "fTo"].forEach(id => {
+    document.getElementById(id).addEventListener("change", render);
+  });
+
+  loadAllStores();
+}
+</script>
+
+
+</body></html>
