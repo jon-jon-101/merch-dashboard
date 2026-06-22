@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0057)file:///Users/jonwells/Downloads/teemill-dashboard_8.html -->
+<!-- saved from url=(0057)file:///Users/jonwells/Downloads/teemill-dashboard_9.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,6 +100,12 @@
     cursor: pointer; transition: all .12s; white-space: nowrap; margin-top: 18px;
   }
   .reset-btn:hover { background: var(--blue-bg); border-color: var(--blue); color: var(--blue-txt); }
+  .apply-btn {
+    font-size: 11px; padding: 5px 14px; border: 1px solid var(--blue);
+    border-radius: var(--radius-sm); background: var(--blue); color: #fff;
+    cursor: pointer; transition: opacity .12s; white-space: nowrap; margin-top: 18px; font-weight: 500;
+  }
+  .apply-btn:hover { opacity: .85; }
 
   /* ── WINDOW BADGE ── */
   .window-badge {
@@ -231,7 +237,7 @@
 <!-- ══════════════════════════════════════
      PASSWORD SCREEN
 ══════════════════════════════════════ -->
-<div id="lockScreen" style="display: none;">
+<div id="lockScreen">
   <div class="lock-card">
     <div class="lock-logo">🧵</div>
     <div class="lock-title">Teemill Dashboard</div>
@@ -245,7 +251,7 @@
 <!-- ══════════════════════════════════════
      DASHBOARD
 ══════════════════════════════════════ -->
-<div id="dashboard" style="display: block;">
+<div id="dashboard">
 
   <div class="topbar">
     <div class="topbar-left">
@@ -253,7 +259,7 @@
       <span class="topbar-sub">Designer Performance Dashboard</span>
     </div>
     <div class="topbar-right">
-      <span id="lastRefreshed" style="font-size:11px;color:var(--text3)">Refreshed 13:49</span>
+      <span id="lastRefreshed" style="font-size:11px;color:var(--text3)"></span>
       <button class="lock-out-btn" onclick="lockOut()">🔒 Lock</button>
     </div>
   </div>
@@ -278,7 +284,7 @@
       </div>
       <div class="fg">
         <label>Designer</label>
-        <select id="fDesigner"><option value="all">All designers</option><option value="Bam">Bam</option><option value="BeckyBurns">BeckyBurns</option><option value="BobbyC">BobbyC</option><option value="CPADZ">CPADZ</option><option value="CarolineRB">CarolineRB</option><option value="Crystal">Crystal</option><option value="GBro">GBro</option><option value="Geo">Geo</option><option value="Hylkje">Hylkje</option><option value="JamesFletcher">JamesFletcher</option><option value="Jon">Jon</option><option value="Kat">Kat</option><option value="KatherineS">KatherineS</option><option value="Lord">Lord</option><option value="Lottie">Lottie</option><option value="Maddy_lankester">Maddy_lankester</option><option value="Mart">Mart</option><option value="Mattryan">Mattryan</option><option value="Nathan">Nathan</option><option value="NicolaG">NicolaG</option><option value="PaulCox">PaulCox</option><option value="Phoebs">Phoebs</option><option value="Reece">Reece</option><option value="RichardBrimson">RichardBrimson</option><option value="Robbie">Robbie</option><option value="Rosie_H">Rosie_H</option><option value="SaraJane">SaraJane</option><option value="Sarad">Sarad</option><option value="SarahK">SarahK</option><option value="SarahP">SarahP</option><option value="Sergio">Sergio</option><option value="Shark-Trust-Hannah">Shark-Trust-Hannah</option><option value="SophieB">SophieB</option><option value="TimS">TimS</option><option value="emma-g">emma-g</option><option value="genevieve">genevieve</option><option value="joeb">joeb</option><option value="jsw">jsw</option><option value="kylef">kylef</option><option value="leanne">leanne</option><option value="mokin">mokin</option><option value="neilted">neilted</option><option value="tamsin">tamsin</option><option value="Unknown">Unknown</option></select>
+        <select id="fDesigner"><option value="all">All designers</option></select>
       </div>
       <div class="fg">
         <label>Window — created from</label>
@@ -288,44 +294,25 @@
         <label>Window — created to</label>
         <input type="date" id="fTo">
       </div>
+      <button class="apply-btn" onclick="applyWindow()">Apply window</button>
       <button class="reset-btn" onclick="resetYTD()">↺ Reset to YTD</button>
     </div>
 
-    <div class="window-badge" id="windowBadge">📅 Year to date — 1 Jan 2026 → 22 Jun 2026</div>
+    <div class="window-badge" id="windowBadge">📅 Loading…</div>
 
     <!-- STATUS -->
     <div class="status-bar">
-      <span class="status-dot" id="statusDot" style="background: var(--green);"></span>
-      <span id="statusText">Loaded 11,413 products from 8 stores</span>
+      <span class="status-dot loading" id="statusDot"></span>
+      <span id="statusText">Loading data from Google Sheets…</span>
     </div>
 
     <!-- KPI ROW -->
-    <div class="kpi-grid" id="kpiGrid"><div class="kpi hi">
-    <div class="kpi-label">Designs in window</div>
-    <div class="kpi-val">2,337</div>
-    <div class="kpi-sub">8 stores</div>
-  </div><div class="kpi hi">
-    <div class="kpi-label">With 1+ sale</div>
-    <div class="kpi-val">1,202</div>
-    <div class="kpi-sub">51.4% of window</div>
-  </div><div class="kpi">
-    <div class="kpi-label">Revenue (window designs)</div>
-    <div class="kpi-val">£629,205</div>
-    <div class="kpi-sub">shown products only</div>
-  </div><div class="kpi">
-    <div class="kpi-label">Avg CVR (window)</div>
-    <div class="kpi-val">0.01%</div>
-    <div class="kpi-sub">mean across products</div>
-  </div><div class="kpi">
-    <div class="kpi-label">% designs AI generated</div>
-    <div class="kpi-val" style="font-size:16px;color:var(--text3);font-style:italic">—</div>
-    <div class="kpi-sub">column not yet in sheet</div>
-  </div></div>
+    <div class="kpi-grid" id="kpiGrid"></div>
 
     <!-- STORE TABLE -->
     <div class="section">
       <div class="sec-hdr">
-        <span class="sec-title">Store performance <span id="storeNote" style="font-weight:400;text-transform:none;opacity:.7">(8 stores with designs in window)</span></span>
+        <span class="sec-title">Store performance <span id="storeNote" style="font-weight:400;text-transform:none;opacity:.7"></span></span>
       </div>
       <div class="tcard">
         <table class="dtbl" id="storeTable">
@@ -359,247 +346,9 @@
               <th class="grp-opt-col" style="min-width:65px" onclick="ssrt(&#39;avgPcr&#39;)">Avg PCR <span class="sa" id="ssa-avgPcr">▼</span></th>
             </tr>
           </thead>
-          <tbody id="sBody"><tr>
-      <td class="left">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="rank r1">1</span>
-          <span style="font-weight:600">RSPB</span>
-        </div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£257,271</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:100.0%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£1703.78</td>
-
-      <td class="grp-out-col">151</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-green">78.1%</span></td>
-      <td class="grp-out-col">6</td>
-      <td class="grp-out-col">0.02%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="rank r2">2</span>
-          <span style="font-weight:600">Shirtbox</span>
-        </div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£134,302</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:52.2%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£89.18</td>
-
-      <td class="grp-out-col">1,506</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-amber">38.4%</span></td>
-      <td class="grp-out-col">60.2</td>
-      <td class="grp-out-col">0.01%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="rank r3">3</span>
-          <span style="font-weight:600">Wildlife Trusts</span>
-        </div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£132,582</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:51.5%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£634.36</td>
-
-      <td class="grp-out-col">209</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-green">83.3%</span></td>
-      <td class="grp-out-col">8.4</td>
-      <td class="grp-out-col">0.02%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="rank ">4</span>
-          <span style="font-weight:600">BBC Earth</span>
-        </div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£40,020</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:15.6%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£666.99</td>
-
-      <td class="grp-out-col">60</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-green">93.3%</span></td>
-      <td class="grp-out-col">2.4</td>
-      <td class="grp-out-col">0.02%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="rank ">5</span>
-          <span style="font-weight:600">Sea Shepherd Global</span>
-        </div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£33,932</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:13.2%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£230.83</td>
-
-      <td class="grp-out-col">147</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-green">75.5%</span></td>
-      <td class="grp-out-col">5.9</td>
-      <td class="grp-out-col">0.01%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="rank ">6</span>
-          <span style="font-weight:600">Wallace &amp; Gromit</span>
-        </div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£17,187</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:6.7%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£179.03</td>
-
-      <td class="grp-out-col">96</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-green">65.6%</span></td>
-      <td class="grp-out-col">3.8</td>
-      <td class="grp-out-col">0.02%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="rank ">7</span>
-          <span style="font-weight:600">Shark Trust</span>
-        </div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£8,558</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:3.3%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£68.46</td>
-
-      <td class="grp-out-col">125</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-amber">56.8%</span></td>
-      <td class="grp-out-col">5</td>
-      <td class="grp-out-col">0.02%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="rank ">8</span>
-          <span style="font-weight:600">Music Declares Emergency</span>
-        </div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£5,354</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:2.1%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£124.51</td>
-
-      <td class="grp-out-col">43</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-green">72.1%</span></td>
-      <td class="grp-out-col">1.7</td>
-      <td class="grp-out-col">0.02%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr></tbody>
+          <tbody id="sBody">
+            <tr><td colspan="15" class="empty">Loading…</td></tr>
+          </tbody>
         </table>
       </div>
       <p class="foot-note">— = data not yet available in export &nbsp;·&nbsp; Window filters designs by creation date</p>
@@ -608,7 +357,7 @@
     <!-- DESIGNER TABLE -->
     <div class="section">
       <div class="sec-hdr">
-        <span class="sec-title">Designer performance <span id="desNote" style="font-weight:400;text-transform:none;opacity:.7">(20 designers with designs in window)</span></span>
+        <span class="sec-title">Designer performance <span id="desNote" style="font-weight:400;text-transform:none;opacity:.7"></span></span>
         <span class="sec-note" id="windowNote"></span>
       </div>
       <div class="tcard">
@@ -644,587 +393,9 @@
               <th class="grp-opt-col" style="min-width:65px" onclick="dsrt(&#39;avgPcr&#39;)">Avg PCR <span class="sa" id="sa-avgPcr">▼</span></th>
             </tr>
           </thead>
-          <tbody id="dBody"><tr>
-      <td class="left"><span class="rank r1">1</span></td>
-      <td class="left">
-        <div style="font-weight:600;margin-bottom:3px">Lottie</div>
-        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">RSPB</span> <span class="badge b-store">Wallace &amp; Gromit</span> <span class="badge b-store">Wildlife Trusts</span></div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£301,706</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:100.0%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£967.00</td>
-
-      <td class="grp-out-col">312</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-green">82.1%</span></td>
-      <td class="grp-out-col">12.5</td>
-      <td class="grp-out-col">0.02%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left"><span class="rank r2">2</span></td>
-      <td class="left">
-        <div style="font-weight:600;margin-bottom:3px">Phoebs</div>
-        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">RSPB</span> <span class="badge b-store">Wallace &amp; Gromit</span> <span class="badge b-store">Wildlife Trusts</span></div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£97,275</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:32.2%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£1023.95</td>
-
-      <td class="grp-out-col">95</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-green">66.3%</span></td>
-      <td class="grp-out-col">3.8</td>
-      <td class="grp-out-col">0.02%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left"><span class="rank r3">3</span></td>
-      <td class="left">
-        <div style="font-weight:600;margin-bottom:3px">CPADZ</div>
-        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">BBC Earth</span> <span class="badge b-store">Shirtbox</span></div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£82,286</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:27.3%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£575.43</td>
-
-      <td class="grp-out-col">143</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-green">66.4%</span></td>
-      <td class="grp-out-col">5.7</td>
-      <td class="grp-out-col">0.02%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left"><span class="rank ">4</span></td>
-      <td class="left">
-        <div style="font-weight:600;margin-bottom:3px">SaraJane</div>
-        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">BBC Earth</span> <span class="badge b-store">Music Declares Emergency</span> <span class="badge b-store">Sea Shepherd Global</span> <span class="badge b-store">Shark Trust</span></div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£51,602</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:17.1%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£400.01</td>
-
-      <td class="grp-out-col">129</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-green">78.3%</span></td>
-      <td class="grp-out-col">5.2</td>
-      <td class="grp-out-col">0.01%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left"><span class="rank ">5</span></td>
-      <td class="left">
-        <div style="font-weight:600;margin-bottom:3px">SophieB</div>
-        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Music Declares Emergency</span> <span class="badge b-store">Sea Shepherd Global</span> <span class="badge b-store">Shark Trust</span></div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£30,879</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:10.2%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£156.74</td>
-
-      <td class="grp-out-col">197</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-green">66%</span></td>
-      <td class="grp-out-col">7.9</td>
-      <td class="grp-out-col">0.02%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left"><span class="rank ">6</span></td>
-      <td class="left">
-        <div style="font-weight:600;margin-bottom:3px">Reece</div>
-        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Shirtbox</span></div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£24,660</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:8.2%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£27.99</td>
-
-      <td class="grp-out-col">881</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-amber">34.8%</span></td>
-      <td class="grp-out-col">35.2</td>
-      <td class="grp-out-col">0.01%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left"><span class="rank ">7</span></td>
-      <td class="left">
-        <div style="font-weight:600;margin-bottom:3px">Mattryan</div>
-        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Shirtbox</span></div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£20,937</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:6.9%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£275.49</td>
-
-      <td class="grp-out-col">76</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-green">73.7%</span></td>
-      <td class="grp-out-col">3</td>
-      <td class="grp-out-col">0.02%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left"><span class="rank ">8</span></td>
-      <td class="left">
-        <div style="font-weight:600;margin-bottom:3px">Rosie_H</div>
-        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">BBC Earth</span> <span class="badge b-store">RSPB</span> <span class="badge b-store">Wallace &amp; Gromit</span> <span class="badge b-store">Wildlife Trusts</span></div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£7,735</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:2.6%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£128.91</td>
-
-      <td class="grp-out-col">60</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-green">75%</span></td>
-      <td class="grp-out-col">2.4</td>
-      <td class="grp-out-col">0.02%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left"><span class="rank ">9</span></td>
-      <td class="left">
-        <div style="font-weight:600;margin-bottom:3px">BeckyBurns</div>
-        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Shirtbox</span></div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£2,367</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:0.8%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£7.71</td>
-
-      <td class="grp-out-col">307</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-red">23.5%</span></td>
-      <td class="grp-out-col">12.3</td>
-      <td class="grp-out-col">0.01%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left"><span class="rank ">10</span></td>
-      <td class="left">
-        <div style="font-weight:600;margin-bottom:3px">SarahK</div>
-        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">RSPB</span> <span class="badge b-store">Shark Trust</span> <span class="badge b-store">Wildlife Trusts</span></div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£2,206</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:0.7%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£275.73</td>
-
-      <td class="grp-out-col">8</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-green">75%</span></td>
-      <td class="grp-out-col">0.3</td>
-      <td class="grp-out-col">0.02%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left"><span class="rank ">11</span></td>
-      <td class="left">
-        <div style="font-weight:600;margin-bottom:3px">RichardBrimson</div>
-        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Shirtbox</span></div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£1,803</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:0.6%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£40.06</td>
-
-      <td class="grp-out-col">45</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-amber">46.7%</span></td>
-      <td class="grp-out-col">1.8</td>
-      <td class="grp-out-col">0.01%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left"><span class="rank ">12</span></td>
-      <td class="left">
-        <div style="font-weight:600;margin-bottom:3px">Sergio</div>
-        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Shirtbox</span></div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£1,504</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:0.5%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£36.69</td>
-
-      <td class="grp-out-col">41</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-amber">46.3%</span></td>
-      <td class="grp-out-col">1.6</td>
-      <td class="grp-out-col">0.01%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left"><span class="rank ">13</span></td>
-      <td class="left">
-        <div style="font-weight:600;margin-bottom:3px">genevieve</div>
-        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Shark Trust</span></div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£1,253</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:0.4%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£65.96</td>
-
-      <td class="grp-out-col">19</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-green">84.2%</span></td>
-      <td class="grp-out-col">0.8</td>
-      <td class="grp-out-col">0.03%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left"><span class="rank ">14</span></td>
-      <td class="left">
-        <div style="font-weight:600;margin-bottom:3px">Robbie</div>
-        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">BBC Earth</span></div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£1,229</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:0.4%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£307.27</td>
-
-      <td class="grp-out-col">4</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-green">75%</span></td>
-      <td class="grp-out-col">0.2</td>
-      <td class="grp-out-col">0.02%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left"><span class="rank ">15</span></td>
-      <td class="left">
-        <div style="font-weight:600;margin-bottom:3px">Jon</div>
-        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Shirtbox</span></div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£871</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:0.3%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£174.29</td>
-
-      <td class="grp-out-col">5</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-green">80%</span></td>
-      <td class="grp-out-col">0.2</td>
-      <td class="grp-out-col">0.03%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left"><span class="rank ">16</span></td>
-      <td class="left">
-        <div style="font-weight:600;margin-bottom:3px">GBro</div>
-        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Sea Shepherd Global</span></div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£316</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:0.1%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£316.40</td>
-
-      <td class="grp-out-col">1</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-green">100%</span></td>
-      <td class="grp-out-col">0</td>
-      <td class="grp-out-col">0.00%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left"><span class="rank ">17</span></td>
-      <td class="left">
-        <div style="font-weight:600;margin-bottom:3px">SarahP</div>
-        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Sea Shepherd Global</span></div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£310</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:0.1%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£155.00</td>
-
-      <td class="grp-out-col">2</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-green">100%</span></td>
-      <td class="grp-out-col">0.1</td>
-      <td class="grp-out-col">0.04%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left"><span class="rank ">18</span></td>
-      <td class="left">
-        <div style="font-weight:600;margin-bottom:3px">Unknown</div>
-        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Shark Trust</span> <span class="badge b-store">Shirtbox</span></div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£192</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:0.1%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£21.30</td>
-
-      <td class="grp-out-col">9</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-amber">33.3%</span></td>
-      <td class="grp-out-col">0.4</td>
-      <td class="grp-out-col">0.01%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left"><span class="rank ">19</span></td>
-      <td class="left">
-        <div style="font-weight:600;margin-bottom:3px">Mart</div>
-        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Shirtbox</span></div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£55</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:0.0%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£27.44</td>
-
-      <td class="grp-out-col">2</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-amber">50%</span></td>
-      <td class="grp-out-col">0.1</td>
-      <td class="grp-out-col">0.01%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr><tr>
-      <td class="left"><span class="rank ">20</span></td>
-      <td class="left">
-        <div style="font-weight:600;margin-bottom:3px">jsw</div>
-        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Shirtbox</span></div>
-      </td>
-
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£19</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:0.0%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col"><span class="ph">—</span></td>
-      <td class="grp-£-col" style="font-weight:600">£19.00</td>
-
-      <td class="grp-out-col">1</td>
-      <td class="grp-out-col"><span class="ph">—</span></td>
-      <td class="grp-out-col"><span class="badge b-green">100%</span></td>
-      <td class="grp-out-col">0</td>
-      <td class="grp-out-col">0.04%</td>
-
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-      <td class="grp-kp-col"><span class="ph">—</span></td>
-
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
-      <td class="grp-opt-col"><span class="ph">—</span></td>
-    </tr></tbody>
+          <tbody id="dBody">
+            <tr><td colspan="16" class="empty">Loading…</td></tr>
+          </tbody>
         </table>
       </div>
       <p class="foot-note">— = data not yet available in export &nbsp;·&nbsp; Window filters designs by creation date &nbsp;·&nbsp; Data loads live from Google Sheets</p>
@@ -1748,9 +919,8 @@ function init() {
   document.getElementById("fStore").addEventListener("change", () => {
     loadAllStores(); // reload when store changes
   });
-  ["fDesigner", "fFrom", "fTo"].forEach(id => {
-    document.getElementById(id).addEventListener("change", render);
-  });
+  // Date inputs require the Apply button — only designer re-renders immediately
+  document.getElementById("fDesigner").addEventListener("change", render);
 
   loadAllStores();
 }
