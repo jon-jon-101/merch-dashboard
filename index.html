@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<!-- saved from url=(0057)file:///Users/jonwells/Downloads/teemill-dashboard_9.html -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="en">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Teemill Designer Performance Dashboard</title>
 <style>
@@ -219,6 +219,18 @@
   .rev-bar-bg { flex: 1; height: 4px; background: var(--border); border-radius: 2px; min-width: 30px; overflow: hidden; }
   .rev-bar-fill { height: 100%; border-radius: 2px; background: var(--blue); }
 
+  /* ── VIP ROW STYLES ── */
+  .vip-row td { background: linear-gradient(90deg, rgba(124,58,237,0.06) 0%, transparent 100%); }
+  .vip-row:hover td { background: linear-gradient(90deg, rgba(124,58,237,0.10) 0%, rgba(0,0,0,0.02) 100%) !important; }
+  .vip-label { display:flex; align-items:center; gap:8px; }
+  .vip-badge { display:inline-block; padding:2px 8px; border-radius:100px; font-size:10px; font-weight:700; background:#EDE9FE; color:#5B21B6; }
+  .vip-toggle { display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:4px; border:1px solid #C4B5FD; background:#EDE9FE; color:#5B21B6; font-size:10px; cursor:pointer; transition:all .15s; flex-shrink:0; }
+  .vip-toggle:hover { background:#DDD6FE; }
+  .vip-child td { background:rgba(124,58,237,0.02); }
+  .vip-child td:first-child { padding-left:36px; }
+  .vip-child:hover td { background:rgba(124,58,237,0.05) !important; }
+  .store-indent { color:var(--text2); font-size:11px; }
+
   /* ── EMPTY STATE ── */
   .empty { padding: 2.5rem; text-align: center; color: var(--text3); font-size: 13px; }
 
@@ -273,13 +285,14 @@
         <select id="fStore">
           <option value="all">All stores</option>
           <option value="Shark Trust">Shark Trust</option>
-          <option value="Wallace &amp; Gromit">Wallace &amp; Gromit</option>
+          <option value="Wallace & Gromit">Wallace &amp; Gromit</option>
           <option value="BBC Earth">BBC Earth</option>
           <option value="Music Declares Emergency">Music Declares Emergency</option>
           <option value="Sea Shepherd Global">Sea Shepherd Global</option>
           <option value="Wildlife Trusts">Wildlife Trusts</option>
           <option value="Shirtbox">Shirtbox</option>
           <option value="RSPB">RSPB</option>
+          <option value="Rapanui">Rapanui</option>
         </select>
       </div>
       <div class="fg">
@@ -319,31 +332,31 @@
           <thead>
             <tr class="grp">
               <th class="grp-id" colspan="1"></th>
-              <th class="grp-£" colspan="3">£</th>
+              <th class="grp-£"   colspan="3">£</th>
               <th class="grp-out" colspan="5">Output</th>
-              <th class="grp-kp" colspan="3">KP Opportunity</th>
+              <th class="grp-kp"  colspan="3">KP Opportunity</th>
               <th class="grp-opt" colspan="3">Optimisation</th>
             </tr>
             <tr class="cols">
-              <th class="left" style="min-width:150px" onclick="ssrt(&#39;store&#39;)">Store <span class="sa on" id="ssa-store">▼</span></th>
+              <th class="left" style="min-width:150px" onclick="ssrt('store')">Store <span class="sa on" id="ssa-store">▼</span></th>
 
-              <th class="grp-£-col" style="min-width:105px" onclick="ssrt(&#39;totalRev&#39;)">Total Revenue <span class="sa" id="ssa-totalRev">▼</span></th>
-              <th class="grp-£-col" style="min-width:80px" onclick="ssrt(&#39;pctAIRev&#39;)">% rev from<br>AI designs <span class="sa" id="ssa-pctAIRev">▼</span></th>
-              <th class="grp-£-col" style="min-width:85px" onclick="ssrt(&#39;avgRev&#39;)">AVG Rev/<br>Design <span class="sa" id="ssa-avgRev">▼</span></th>
+              <th class="grp-£-col"  style="min-width:105px" onclick="ssrt('totalRev')">Total Revenue <span class="sa" id="ssa-totalRev">▼</span></th>
+              <th class="grp-£-col"  style="min-width:80px"  onclick="ssrt('pctAIRev')">% rev from<br>AI designs <span class="sa" id="ssa-pctAIRev">▼</span></th>
+              <th class="grp-£-col"  style="min-width:85px"  onclick="ssrt('avgRev')">AVG Rev/<br>Design <span class="sa" id="ssa-avgRev">▼</span></th>
 
-              <th class="grp-out-col" style="min-width:75px" onclick="ssrt(&#39;designs&#39;)">Total no.<br>of designs <span class="sa" id="ssa-designs">▼</span></th>
-              <th class="grp-out-col" style="min-width:65px" onclick="ssrt(&#39;pctAI&#39;)">% AI<br>designs <span class="sa" id="ssa-pctAI">▼</span></th>
-              <th class="grp-out-col" style="min-width:75px" onclick="ssrt(&#39;pctSales&#39;)">% with<br>&gt;1 sale <span class="sa" id="ssa-pctSales">▼</span></th>
-              <th class="grp-out-col" style="min-width:85px" onclick="ssrt(&#39;avgDesPerWeek&#39;)">Avg designs<br>per week <span class="sa" id="ssa-avgDesPerWeek">▼</span></th>
-              <th class="grp-out-col" style="min-width:70px" onclick="ssrt(&#39;avgCvr&#39;)">Avg CVR% <span class="sa" id="ssa-avgCvr">▼</span></th>
+              <th class="grp-out-col" style="min-width:75px"  onclick="ssrt('designs')">Total no.<br>of designs <span class="sa" id="ssa-designs">▼</span></th>
+              <th class="grp-out-col" style="min-width:65px"  onclick="ssrt('pctAI')">% AI<br>designs <span class="sa" id="ssa-pctAI">▼</span></th>
+              <th class="grp-out-col" style="min-width:75px"  onclick="ssrt('pctSales')">% with<br>&gt;1 sale <span class="sa" id="ssa-pctSales">▼</span></th>
+              <th class="grp-out-col" style="min-width:85px"  onclick="ssrt('avgDesPerWeek')">Avg designs<br>per week <span class="sa" id="ssa-avgDesPerWeek">▼</span></th>
+              <th class="grp-out-col" style="min-width:70px"  onclick="ssrt('avgCvr')">Avg CVR% <span class="sa" id="ssa-avgCvr">▼</span></th>
 
-              <th class="grp-kp-col" style="min-width:95px" onclick="ssrt(&#39;monthlyOpp&#39;)">£ monthly opp<br>remaining <span class="sa" id="ssa-monthlyOpp">▼</span></th>
-              <th class="grp-kp-col" style="min-width:80px" onclick="ssrt(&#39;pctOppComplete&#39;)">% opps<br>complete <span class="sa" id="ssa-pctOppComplete">▼</span></th>
-              <th class="grp-kp-col" style="min-width:80px" onclick="ssrt(&#39;timeToComplete&#39;)">Time to<br>complete <span class="sa" id="ssa-timeToComplete">▼</span></th>
+              <th class="grp-kp-col" style="min-width:95px"  onclick="ssrt('monthlyOpp')">£ monthly opp<br>remaining <span class="sa" id="ssa-monthlyOpp">▼</span></th>
+              <th class="grp-kp-col" style="min-width:80px"  onclick="ssrt('pctOppComplete')">% opps<br>complete <span class="sa" id="ssa-pctOppComplete">▼</span></th>
+              <th class="grp-kp-col" style="min-width:80px"  onclick="ssrt('timeToComplete')">Time to<br>complete <span class="sa" id="ssa-timeToComplete">▼</span></th>
 
-              <th class="grp-opt-col" style="min-width:75px" onclick="ssrt(&#39;noIssues&#39;)">No. products<br>w/ issues <span class="sa" id="ssa-noIssues">▼</span></th>
-              <th class="grp-opt-col" style="min-width:75px" onclick="ssrt(&#39;pctIssues&#39;)">% products<br>w/ issues <span class="sa" id="ssa-pctIssues">▼</span></th>
-              <th class="grp-opt-col" style="min-width:65px" onclick="ssrt(&#39;avgPcr&#39;)">Avg PCR <span class="sa" id="ssa-avgPcr">▼</span></th>
+              <th class="grp-opt-col" style="min-width:75px"  onclick="ssrt('noIssues')">No. products<br>w/ issues <span class="sa" id="ssa-noIssues">▼</span></th>
+              <th class="grp-opt-col" style="min-width:75px"  onclick="ssrt('pctIssues')">% products<br>w/ issues <span class="sa" id="ssa-pctIssues">▼</span></th>
+              <th class="grp-opt-col" style="min-width:65px"  onclick="ssrt('avgPcr')">Avg PCR <span class="sa" id="ssa-avgPcr">▼</span></th>
             </tr>
           </thead>
           <tbody id="sBody">
@@ -365,32 +378,32 @@
           <thead>
             <tr class="grp">
               <th class="grp-id" colspan="2"></th>
-              <th class="grp-£" colspan="3">£</th>
+              <th class="grp-£"   colspan="3">£</th>
               <th class="grp-out" colspan="5">Output</th>
-              <th class="grp-kp" colspan="3">KP Opportunity</th>
+              <th class="grp-kp"  colspan="3">KP Opportunity</th>
               <th class="grp-opt" colspan="3">Optimisation</th>
             </tr>
             <tr class="cols" id="colHeaders">
               <th class="left" style="min-width:28px">#</th>
-              <th class="left" style="min-width:120px" onclick="dsrt(&#39;designer&#39;)">Designer <span class="sa" id="sa-designer">▼</span></th>
+              <th class="left" style="min-width:120px" onclick="dsrt('designer')">Designer <span class="sa" id="sa-designer">▼</span></th>
 
-              <th class="grp-£-col" style="min-width:105px" onclick="dsrt(&#39;totalRev&#39;)">Total Revenue <span class="sa on" id="sa-totalRev">▼</span></th>
-              <th class="grp-£-col" style="min-width:80px" onclick="dsrt(&#39;pctAIRev&#39;)">% rev from<br>AI designs <span class="sa" id="sa-pctAIRev">▼</span></th>
-              <th class="grp-£-col" style="min-width:85px" onclick="dsrt(&#39;avgRev&#39;)">AVG Rev/<br>Design <span class="sa" id="sa-avgRev">▼</span></th>
+              <th class="grp-£-col"  style="min-width:105px" onclick="dsrt('totalRev')">Total Revenue <span class="sa on" id="sa-totalRev">▼</span></th>
+              <th class="grp-£-col"  style="min-width:80px"  onclick="dsrt('pctAIRev')">% rev from<br>AI designs <span class="sa" id="sa-pctAIRev">▼</span></th>
+              <th class="grp-£-col"  style="min-width:85px"  onclick="dsrt('avgRev')">AVG Rev/<br>Design <span class="sa" id="sa-avgRev">▼</span></th>
 
-              <th class="grp-out-col" style="min-width:75px" onclick="dsrt(&#39;designs&#39;)">Total no.<br>of designs <span class="sa" id="sa-designs">▼</span></th>
-              <th class="grp-out-col" style="min-width:65px" onclick="dsrt(&#39;pctAI&#39;)">% AI<br>designs <span class="sa" id="sa-pctAI">▼</span></th>
-              <th class="grp-out-col" style="min-width:75px" onclick="dsrt(&#39;pctSales&#39;)">% with<br>&gt;1 sale <span class="sa" id="sa-pctSales">▼</span></th>
-              <th class="grp-out-col" style="min-width:85px" onclick="dsrt(&#39;avgDesPerWeek&#39;)">Avg designs<br>per week <span class="sa" id="sa-avgDesPerWeek">▼</span></th>
-              <th class="grp-out-col" style="min-width:70px" onclick="dsrt(&#39;avgCvr&#39;)">Avg CVR% <span class="sa" id="sa-avgCvr">▼</span></th>
+              <th class="grp-out-col" style="min-width:75px"  onclick="dsrt('designs')">Total no.<br>of designs <span class="sa" id="sa-designs">▼</span></th>
+              <th class="grp-out-col" style="min-width:65px"  onclick="dsrt('pctAI')">% AI<br>designs <span class="sa" id="sa-pctAI">▼</span></th>
+              <th class="grp-out-col" style="min-width:75px"  onclick="dsrt('pctSales')">% with<br>&gt;1 sale <span class="sa" id="sa-pctSales">▼</span></th>
+              <th class="grp-out-col" style="min-width:85px"  onclick="dsrt('avgDesPerWeek')">Avg designs<br>per week <span class="sa" id="sa-avgDesPerWeek">▼</span></th>
+              <th class="grp-out-col" style="min-width:70px"  onclick="dsrt('avgCvr')">Avg CVR% <span class="sa" id="sa-avgCvr">▼</span></th>
 
-              <th class="grp-kp-col" style="min-width:95px" onclick="dsrt(&#39;monthlyOpp&#39;)">£ monthly opp<br>remaining <span class="sa" id="sa-monthlyOpp">▼</span></th>
-              <th class="grp-kp-col" style="min-width:80px" onclick="dsrt(&#39;pctOppComplete&#39;)">% opps<br>complete <span class="sa" id="sa-pctOppComplete">▼</span></th>
-              <th class="grp-kp-col" style="min-width:80px" onclick="dsrt(&#39;timeToComplete&#39;)">Time to<br>complete <span class="sa" id="sa-timeToComplete">▼</span></th>
+              <th class="grp-kp-col" style="min-width:95px"  onclick="dsrt('monthlyOpp')">£ monthly opp<br>remaining <span class="sa" id="sa-monthlyOpp">▼</span></th>
+              <th class="grp-kp-col" style="min-width:80px"  onclick="dsrt('pctOppComplete')">% opps<br>complete <span class="sa" id="sa-pctOppComplete">▼</span></th>
+              <th class="grp-kp-col" style="min-width:80px"  onclick="dsrt('timeToComplete')">Time to<br>complete <span class="sa" id="sa-timeToComplete">▼</span></th>
 
-              <th class="grp-opt-col" style="min-width:75px" onclick="dsrt(&#39;noIssues&#39;)">No. products<br>w/ issues <span class="sa" id="sa-noIssues">▼</span></th>
-              <th class="grp-opt-col" style="min-width:75px" onclick="dsrt(&#39;pctIssues&#39;)">% products<br>w/ issues <span class="sa" id="sa-pctIssues">▼</span></th>
-              <th class="grp-opt-col" style="min-width:65px" onclick="dsrt(&#39;avgPcr&#39;)">Avg PCR <span class="sa" id="sa-avgPcr">▼</span></th>
+              <th class="grp-opt-col" style="min-width:75px"  onclick="dsrt('noIssues')">No. products<br>w/ issues <span class="sa" id="sa-noIssues">▼</span></th>
+              <th class="grp-opt-col" style="min-width:75px"  onclick="dsrt('pctIssues')">% products<br>w/ issues <span class="sa" id="sa-pctIssues">▼</span></th>
+              <th class="grp-opt-col" style="min-width:65px"  onclick="dsrt('avgPcr')">Avg PCR <span class="sa" id="sa-avgPcr">▼</span></th>
             </tr>
           </thead>
           <tbody id="dBody">
@@ -418,8 +431,21 @@ const STORES = [
   "Sea Shepherd Global",
   "Wildlife Trusts",
   "Shirtbox",
-  "RSPB"
+  "RSPB",
+  "Rapanui"
 ];
+
+// Store grouping config for the store performance table
+const STORE_GROUPS = {
+  top: ["Rapanui", "Shirtbox"],   // always shown as individual rows first
+  vip: [                           // combined as "VIP" row, expandable
+    "Shark Trust", "Wallace & Gromit", "BBC Earth",
+    "Music Declares Emergency", "Sea Shepherd Global",
+    "Wildlife Trusts", "RSPB"
+  ]
+};
+
+let vipExpanded = false; // tracks whether VIP sub-rows are shown
 
 const TODAY     = new Date();
 const YTD_START = `${TODAY.getFullYear()}-01-01`;
@@ -682,104 +708,161 @@ function ssrt(col) {
   renderStoreTable(getFilteredProducts());
 }
 
+function aggregateStore(storeName, products, weeks) {
+  const p = products.filter(x => x.store === storeName);
+  const totalRev  = p.reduce((a,x) => a+x.revenue, 0);
+  const designs   = p.length;
+  const withSales = p.filter(x => x.sales > 0).length;
+  const crSum     = p.reduce((a,x) => a+x.cr, 0);
+  const aiCount   = p.filter(x => x.aiGenerated).length;
+  const issueCount= p.filter(x => x.merchIssue).length;
+  return {
+    store:         storeName,
+    totalRev,
+    designs,
+    withSales,
+    avgRev:        designs ? +(totalRev / designs).toFixed(2) : 0,
+    pctSales:      designs ? +((withSales / designs) * 100).toFixed(1) : 0,
+    avgCvr:        designs ? +(crSum / designs).toFixed(2) : 0,
+    avgDesPerWeek: +(designs / weeks).toFixed(1),
+    pctAI:         designs ? +((aiCount / designs) * 100).toFixed(1) : 0,
+    pctAIRev: null, monthlyOpp: null, pctOppComplete: null,
+    timeToComplete: null, noIssues: issueCount || null,
+    pctIssues: designs ? +((issueCount / designs) * 100).toFixed(1) : null,
+    avgPcr: null,
+  };
+}
+
+function aggregateGroup(storeNames, label, products, weeks) {
+  const p = products.filter(x => storeNames.includes(x.store));
+  const totalRev  = p.reduce((a,x) => a+x.revenue, 0);
+  const designs   = p.length;
+  const withSales = p.filter(x => x.sales > 0).length;
+  const crSum     = p.reduce((a,x) => a+x.cr, 0);
+  const aiCount   = p.filter(x => x.aiGenerated).length;
+  const issueCount= p.filter(x => x.merchIssue).length;
+  return {
+    store: label, isGroup: true, memberStores: storeNames,
+    totalRev, designs, withSales,
+    avgRev:        designs ? +(totalRev / designs).toFixed(2) : 0,
+    pctSales:      designs ? +((withSales / designs) * 100).toFixed(1) : 0,
+    avgCvr:        designs ? +(crSum / designs).toFixed(2) : 0,
+    avgDesPerWeek: +(designs / weeks).toFixed(1),
+    pctAI:         designs ? +((aiCount / designs) * 100).toFixed(1) : 0,
+    pctAIRev: null, monthlyOpp: null, pctOppComplete: null,
+    timeToComplete: null, noIssues: issueCount || null,
+    pctIssues: designs ? +((issueCount / designs) * 100).toFixed(1) : null,
+    avgPcr: null,
+  };
+}
+
 function buildStoreRows(products) {
   const { from, to } = getWindow();
   const weeks = weeksInWindow(from, to);
-  const sm = {};
-  products.forEach(p => {
-    if (!sm[p.store]) sm[p.store] = {
-      store: p.store,
-      totalRev: 0, designs: 0, withSales: 0, crSum: 0, aiCount: 0, issueCount: 0,
-    };
-    const s = sm[p.store];
-    s.totalRev  += p.revenue;
-    s.designs   += 1;
-    s.withSales += p.sales > 0 ? 1 : 0;
-    s.crSum     += p.cr;
-    s.aiCount   += p.aiGenerated ? 1 : 0;
-    s.issueCount+= p.merchIssue  ? 1 : 0;
-  });
 
-  return Object.values(sm).map(s => ({
-    store:         s.store,
-    totalRev:      s.totalRev,
-    designs:       s.designs,
-    withSales:     s.withSales,
-    avgRev:        s.designs ? +(s.totalRev / s.designs).toFixed(2) : 0,
-    pctSales:      s.designs ? +((s.withSales / s.designs) * 100).toFixed(1) : 0,
-    avgCvr:        s.designs ? +(s.crSum / s.designs).toFixed(2) : 0,
-    avgDesPerWeek: +(s.designs / weeks).toFixed(1),
-    pctAI:         s.designs ? +((s.aiCount / s.designs) * 100).toFixed(1) : 0,
-    pctAIRev:      null,
-    monthlyOpp:    null,
-    pctOppComplete:null,
-    timeToComplete:null,
-    noIssues:      s.issueCount || null,
-    pctIssues:     s.designs ? +((s.issueCount / s.designs) * 100).toFixed(1) : null,
-    avgPcr:        null,
-  }));
+  // Top-level rows: Rapanui, Shirtbox, then VIP (combined)
+  const rows = [];
+  STORE_GROUPS.top.forEach(s => rows.push(aggregateStore(s, products, weeks)));
+  rows.push(aggregateGroup(STORE_GROUPS.vip, "VIP", products, weeks));
+  return rows;
+}
+
+function toggleVip() {
+  vipExpanded = !vipExpanded;
+  renderStoreTable(getFilteredProducts());
+}
+
+function renderStoreRow(r, i, maxRev, isChild = false) {
+  const ph       = v => v === null ? `<span class="ph">—</span>` : v;
+  const phFmt    = v => v === null ? `<span class="ph">—</span>` : `£${Math.round(v).toLocaleString()}`;
+  const pctBadge = (v, hi=60, lo=30) => v === null
+    ? `<span class="ph">—</span>`
+    : `<span class="badge ${v>=hi?"b-green":v>=lo?"b-amber":"b-red"}">${v}%</span>`;
+
+  const rankCls = !isChild ? (i===0?"r1":i===1?"r2":i===2?"r3":"") : "";
+  const revPct  = (r.totalRev / maxRev * 100).toFixed(1);
+  const rowCls  = r.isGroup ? "vip-row" : isChild ? "vip-child" : "";
+
+  let nameCell;
+  if (r.isGroup) {
+    nameCell = `<td class="left">
+      <div class="vip-label">
+        <span class="rank ${rankCls}">${i+1}</span>
+        <span class="vip-badge">VIP</span>
+        <span style="font-weight:700">VIP Stores</span>
+        <span class="vip-toggle" onclick="toggleVip()" title="${vipExpanded?"Collapse":"Expand"} VIP stores">
+          ${vipExpanded ? "▲" : "▼"}
+        </span>
+      </div>
+    </td>`;
+  } else if (isChild) {
+    nameCell = `<td class="left store-indent">↳ ${r.store}</td>`;
+  } else {
+    nameCell = `<td class="left">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="rank ${rankCls}">${i+1}</span>
+        <span style="font-weight:600">${r.store}</span>
+      </div>
+    </td>`;
+  }
+
+  return `<tr class="${rowCls}">
+    ${nameCell}
+    <td class="grp-£-col">
+      <div class="rev-bar-wrap">
+        <span style="min-width:58px;font-weight:700;font-size:12px">£${Math.round(r.totalRev).toLocaleString()}</span>
+        <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:${revPct}%;background:${r.isGroup?"#7C3AED":"var(--blue)"}"></div></div>
+      </div>
+    </td>
+    <td class="grp-£-col">${ph(r.pctAIRev)}</td>
+    <td class="grp-£-col" style="font-weight:600">£${r.avgRev.toFixed(2)}</td>
+    <td class="grp-out-col">${r.designs.toLocaleString()}</td>
+    <td class="grp-out-col">${r.pctAI > 0 ? `<span class="badge b-blue">${r.pctAI}%</span>` : `<span class="ph">—</span>`}</td>
+    <td class="grp-out-col">${pctBadge(r.pctSales)}</td>
+    <td class="grp-out-col">${r.avgDesPerWeek}</td>
+    <td class="grp-out-col">${r.avgCvr.toFixed(2)}%</td>
+    <td class="grp-kp-col">${phFmt(r.monthlyOpp)}</td>
+    <td class="grp-kp-col">${pctBadge(r.pctOppComplete)}</td>
+    <td class="grp-kp-col">${ph(r.timeToComplete)}</td>
+    <td class="grp-opt-col">${ph(r.noIssues)}</td>
+    <td class="grp-opt-col">${pctBadge(r.pctIssues, 20, 5)}</td>
+    <td class="grp-opt-col">${ph(r.avgPcr)}</td>
+  </tr>`;
 }
 
 function renderStoreTable(products) {
-  const rows = buildStoreRows(products).sort((a, b) => {
-    let av = a[sSortCol], bv = b[sSortCol];
-    if (av === null && bv === null) return 0;
-    if (av === null) return 1; if (bv === null) return -1;
-    if (typeof av === "string") return sSortDir * av.localeCompare(bv);
-    return sSortDir * (av - bv);
-  });
+  const { from, to } = getWindow();
+  const weeks = weeksInWindow(from, to);
+  const rows  = buildStoreRows(products);
 
   document.getElementById("storeNote").textContent =
-    `(${rows.length} store${rows.length !== 1 ? "s" : ""} with designs in window)`;
+    `(Rapanui · Shirtbox · VIP${vipExpanded ? " — expanded" : ""})`;
 
-  if (rows.length === 0) {
+  if (products.length === 0) {
     document.getElementById("sBody").innerHTML =
       `<tr><td colspan="15" class="empty">No stores had designs created in this window.</td></tr>`;
     return;
   }
 
   const maxRev = Math.max(...rows.map(r => r.totalRev), 1);
-  const ph      = v => v === null ? `<span class="ph">—</span>` : v;
-  const phFmt   = v => v === null ? `<span class="ph">—</span>` : `£${Math.round(v).toLocaleString()}`;
-  const pctBadge = (v, hiThr = 60, loThr = 30) => v === null
-    ? `<span class="ph">—</span>`
-    : `<span class="badge ${v >= hiThr ? "b-green" : v >= loThr ? "b-amber" : "b-red"}">${v}%</span>`;
+  let html = "";
 
-  document.getElementById("sBody").innerHTML = rows.map((r, i) => {
-    const rankCls = i === 0 ? "r1" : i === 1 ? "r2" : i === 2 ? "r3" : "";
-    const revPct  = (r.totalRev / maxRev * 100).toFixed(1);
-    return `<tr>
-      <td class="left">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="rank ${rankCls}">${i + 1}</span>
-          <span style="font-weight:600">${r.store}</span>
-        </div>
-      </td>
+  rows.forEach((r, i) => {
+    html += renderStoreRow(r, i, maxRev, false);
+    // If VIP row and expanded, render each member store beneath it
+    if (r.isGroup && vipExpanded) {
+      // Sort member stores by revenue
+      const children = r.memberStores
+        .map(s => aggregateStore(s, products, weeks))
+        .filter(s => s.designs > 0)
+        .sort((a, b) => b.totalRev - a.totalRev);
+      children.forEach(child => {
+        html += renderStoreRow(child, i, maxRev, true);
+      });
+    }
+  });
 
-      <td class="grp-£-col">
-        <div class="rev-bar-wrap">
-          <span style="min-width:58px;font-weight:700;font-size:12px">£${Math.round(r.totalRev).toLocaleString()}</span>
-          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:${revPct}%"></div></div>
-        </div>
-      </td>
-      <td class="grp-£-col">${ph(r.pctAIRev)}</td>
-      <td class="grp-£-col" style="font-weight:600">£${r.avgRev.toFixed(2)}</td>
-
-      <td class="grp-out-col">${r.designs.toLocaleString()}</td>
-      <td class="grp-out-col">${r.pctAI > 0 ? `<span class="badge b-blue">${r.pctAI}%</span>` : `<span class="ph">—</span>`}</td>
-      <td class="grp-out-col">${pctBadge(r.pctSales)}</td>
-      <td class="grp-out-col">${r.avgDesPerWeek}</td>
-      <td class="grp-out-col">${r.avgCvr.toFixed(2)}%</td>
-
-      <td class="grp-kp-col">${phFmt(r.monthlyOpp)}</td>
-      <td class="grp-kp-col">${pctBadge(r.pctOppComplete)}</td>
-      <td class="grp-kp-col">${ph(r.timeToComplete)}</td>
-
-      <td class="grp-opt-col">${ph(r.noIssues)}</td>
-      <td class="grp-opt-col">${pctBadge(r.pctIssues, 20, 5)}</td>
-      <td class="grp-opt-col">${ph(r.avgPcr)}</td>
-    </tr>`;
-  }).join("");
+  document.getElementById("sBody").innerHTML = html;
 }
 
 // ── SORT STATE ──────────────────────────────────────
@@ -925,6 +1008,5 @@ function init() {
   loadAllStores();
 }
 </script>
-
-
-</body></html>
+</body>
+</html>
