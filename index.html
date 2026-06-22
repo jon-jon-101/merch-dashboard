@@ -382,8 +382,6 @@
               <th class="grp-id" colspan="2"></th>
               <th class="grp-£"   colspan="3">£</th>
               <th class="grp-out" colspan="5">Output</th>
-              <th class="grp-kp"  colspan="3">KP Opportunity</th>
-              <th class="grp-opt" colspan="3">Optimisation</th>
             </tr>
             <tr class="cols" id="colHeaders">
               <th class="left" style="min-width:28px">#</th>
@@ -398,18 +396,10 @@
               <th class="grp-out-col" style="min-width:75px"  onclick="dsrt('pctSales')">% with<br>&gt;1 sale <span class="sa" id="sa-pctSales">▼</span></th>
               <th class="grp-out-col" style="min-width:85px"  onclick="dsrt('avgDesPerWeek')">Avg designs<br>per week <span class="sa" id="sa-avgDesPerWeek">▼</span></th>
               <th class="grp-out-col" style="min-width:70px"  onclick="dsrt('avgCvr')">Avg CVR% <span class="sa" id="sa-avgCvr">▼</span></th>
-
-              <th class="grp-kp-col" style="min-width:95px"  onclick="dsrt('monthlyOpp')">£ monthly opp<br>remaining <span class="sa" id="sa-monthlyOpp">▼</span></th>
-              <th class="grp-kp-col" style="min-width:80px"  onclick="dsrt('pctOppComplete')">% opps<br>complete <span class="sa" id="sa-pctOppComplete">▼</span></th>
-              <th class="grp-kp-col" style="min-width:80px"  onclick="dsrt('timeToComplete')">Time to<br>complete <span class="sa" id="sa-timeToComplete">▼</span></th>
-
-              <th class="grp-opt-col" style="min-width:75px"  onclick="dsrt('noIssues')">No. products<br>w/ issues <span class="sa" id="sa-noIssues">▼</span></th>
-              <th class="grp-opt-col" style="min-width:75px"  onclick="dsrt('pctIssues')">% products<br>w/ issues <span class="sa" id="sa-pctIssues">▼</span></th>
-              <th class="grp-opt-col" style="min-width:65px"  onclick="dsrt('avgPcr')">Avg PCR <span class="sa" id="sa-avgPcr">▼</span></th>
             </tr>
           </thead>
           <tbody id="dBody">
-            <tr><td colspan="16" class="empty">Loading…</td></tr>
+            <tr><td colspan="7" class="empty">Loading…</td></tr>
           </tbody>
         </table>
       </div>
@@ -922,8 +912,15 @@ function buildDesignerRows(products) {
   }));
 }
 
+let desExpanded = false;
+
+function toggleDesigners() {
+  desExpanded = !desExpanded;
+  renderTable(getFilteredProducts());
+}
+
 function renderTable(products) {
-  const rows = buildDesignerRows(products).sort((a, b) => {
+  const allRows = buildDesignerRows(products).sort((a, b) => {
     let av = a[dSortCol], bv = b[dSortCol];
     if (av === null && bv === null) return 0;
     if (av === null) return 1; if (bv === null) return -1;
@@ -931,35 +928,35 @@ function renderTable(products) {
     return dSortDir * (av - bv);
   });
 
-  document.getElementById("desNote").textContent =
-    `(${rows.length} designer${rows.length !== 1 ? "s" : ""} with designs in window)`;
+  const total   = allRows.length;
+  const showAll = desExpanded || total <= 10;
+  const rows    = showAll ? allRows : allRows.slice(0, 10);
 
-  if (rows.length === 0) {
+  document.getElementById("desNote").textContent =
+    `(${showAll ? total : `top 10 of ${total}`} designer${total !== 1 ? "s" : ""} with designs in window)`;
+
+  if (total === 0) {
     document.getElementById("dBody").innerHTML =
-      `<tr><td colspan="16" class="empty">No designers had designs created in this window.</td></tr>`;
+      `<tr><td colspan="7" class="empty">No designers had designs created in this window.</td></tr>`;
     return;
   }
 
-  const maxRev = Math.max(...rows.map(r => r.totalRev), 1);
-  const ph     = v => v === null ? `<span class="ph">—</span>` : v;
-  const phFmt  = v => v === null ? `<span class="ph">—</span>` : `£${Math.round(v).toLocaleString()}`;
-  const pctBadge = (v, hiThr = 60, loThr = 30) => v === null
+  const maxRev   = Math.max(...allRows.map(r => r.totalRev), 1);
+  const ph       = v => v === null ? `<span class="ph">—</span>` : v;
+  const pctBadge = (v, hi=60, lo=30) => v === null
     ? `<span class="ph">—</span>`
-    : `<span class="badge ${v >= hiThr ? "b-green" : v >= loThr ? "b-amber" : "b-red"}">${v}%</span>`;
+    : `<span class="badge ${v>=hi?"b-green":v>=lo?"b-amber":"b-red"}">${v}%</span>`;
 
-  document.getElementById("dBody").innerHTML = rows.map((r, i) => {
-    const rankCls = i === 0 ? "r1" : i === 1 ? "r2" : i === 2 ? "r3" : "";
-    const storeBadges = r.stores.map(s =>
-      `<span class="badge b-store">${s}</span>`).join(" ");
-    const revPct = (r.totalRev / maxRev * 100).toFixed(1);
-
+  const rowsHtml = rows.map((r, i) => {
+    const rankCls    = i === 0 ? "r1" : i === 1 ? "r2" : i === 2 ? "r3" : "";
+    const storeBadges = r.stores.map(s => `<span class="badge b-store">${s}</span>`).join(" ");
+    const revPct     = (r.totalRev / maxRev * 100).toFixed(1);
     return `<tr>
       <td class="left"><span class="rank ${rankCls}">${i + 1}</span></td>
       <td class="left">
         <div style="font-weight:600;margin-bottom:3px">${r.designer}</div>
         <div style="display:flex;flex-wrap:wrap;gap:3px">${storeBadges}</div>
       </td>
-
       <td class="grp-£-col">
         <div class="rev-bar-wrap">
           <span style="min-width:58px;font-weight:700;font-size:12px">£${Math.round(r.totalRev).toLocaleString()}</span>
@@ -968,22 +965,27 @@ function renderTable(products) {
       </td>
       <td class="grp-£-col">${ph(r.pctAIRev)}</td>
       <td class="grp-£-col" style="font-weight:600">£${r.avgRev.toFixed(2)}</td>
-
       <td class="grp-out-col">${r.designs.toLocaleString()}</td>
       <td class="grp-out-col">${r.pctAI > 0 ? `<span class="badge b-blue">${r.pctAI}%</span>` : `<span class="ph">—</span>`}</td>
       <td class="grp-out-col">${pctBadge(r.pctSales)}</td>
       <td class="grp-out-col">${r.avgDesPerWeek}</td>
       <td class="grp-out-col">${r.avgCvr.toFixed(2)}%</td>
-
-      <td class="grp-kp-col">${phFmt(r.monthlyOpp)}</td>
-      <td class="grp-kp-col">${pctBadge(r.pctOppComplete)}</td>
-      <td class="grp-kp-col">${ph(r.timeToComplete)}</td>
-
-      <td class="grp-opt-col">${ph(r.noIssues)}</td>
-      <td class="grp-opt-col">${pctBadge(r.pctIssues, 20, 5)}</td>
-      <td class="grp-opt-col">${ph(r.avgPcr)}</td>
     </tr>`;
   }).join("");
+
+  // Expand/collapse row shown when there are more than 10
+  const toggleRow = total > 10 ? `
+    <tr>
+      <td colspan="10" style="text-align:center;padding:10px 0;border-top:1px solid var(--border)">
+        <button onclick="toggleDesigners()" style="font-size:11px;padding:5px 16px;border:1px solid var(--border2);border-radius:20px;background:var(--bg);color:var(--text2);cursor:pointer;transition:all .12s"
+          onmouseover="this.style.background='var(--blue-bg)';this.style.borderColor='var(--blue)';this.style.color='var(--blue-txt)'"
+          onmouseout="this.style.background='var(--bg)';this.style.borderColor='var(--border2)';this.style.color='var(--text2)'">
+          ${showAll ? `▲ Show top 10 only` : `▼ Show all ${total} designers`}
+        </button>
+      </td>
+    </tr>` : "";
+
+  document.getElementById("dBody").innerHTML = rowsHtml + toggleRow;
 }
 
 function render() {
