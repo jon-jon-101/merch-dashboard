@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0057)file:///Users/jonwells/Downloads/teemill-dashboard_4.html -->
+<!-- saved from url=(0057)file:///Users/jonwells/Downloads/teemill-dashboard_5.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -253,7 +253,7 @@
       <span class="topbar-sub">Designer Performance Dashboard</span>
     </div>
     <div class="topbar-right">
-      <span id="lastRefreshed" style="font-size:11px;color:var(--text3)">Refreshed 09:04</span>
+      <span id="lastRefreshed" style="font-size:11px;color:var(--text3)">Refreshed 09:13</span>
       <button class="lock-out-btn" onclick="lockOut()">🔒 Lock</button>
     </div>
   </div>
@@ -276,7 +276,7 @@
       </div>
       <div class="fg">
         <label>Designer</label>
-        <select id="fDesigner"><option value="all">All designers</option><option value="Unknown">Unknown</option></select>
+        <select id="fDesigner"><option value="all">All designers</option><option value="Bam">Bam</option><option value="BobbyC">BobbyC</option><option value="CPADZ">CPADZ</option><option value="CarolineRB">CarolineRB</option><option value="GBro">GBro</option><option value="Geo">Geo</option><option value="Hylkje">Hylkje</option><option value="Kat">Kat</option><option value="KatherineS">KatherineS</option><option value="Lord">Lord</option><option value="Lottie">Lottie</option><option value="Maddy_lankester">Maddy_lankester</option><option value="NicolaG">NicolaG</option><option value="PaulCox">PaulCox</option><option value="Phoebs">Phoebs</option><option value="Reece">Reece</option><option value="Robbie">Robbie</option><option value="Rosie_H">Rosie_H</option><option value="SaraJane">SaraJane</option><option value="Sarad">Sarad</option><option value="SarahK">SarahK</option><option value="SarahP">SarahP</option><option value="Shark-Trust-Hannah">Shark-Trust-Hannah</option><option value="SophieB">SophieB</option><option value="emma-g">emma-g</option><option value="genevieve">genevieve</option><option value="mokin">mokin</option><option value="tamsin">tamsin</option><option value="Unknown">Unknown</option></select>
       </div>
       <div class="fg">
         <label>Window — created from</label>
@@ -293,26 +293,26 @@
 
     <!-- STATUS -->
     <div class="status-bar">
-      <span class="status-dot error" id="statusDot"></span>
-      <span id="statusText">Could not load any stores. Check the sheet is set to "Anyone with link can view". Detail: Shark Trust: Failed to fetch | Wallace &amp; Gromit: Failed to fetch | BBC Earth: Failed to fetch | Music Declares Emergency: Failed to fetch | Sea Shepherd Global: Failed to fetch | Wildlife Trusts: Failed to fetch</span>
+      <span class="status-dot" id="statusDot" style="background: var(--green);"></span>
+      <span id="statusText">Loaded 5,602 products from 6 stores</span>
     </div>
 
     <!-- KPI ROW -->
     <div class="kpi-grid" id="kpiGrid"><div class="kpi hi">
     <div class="kpi-label">Designs in window</div>
-    <div class="kpi-val">0</div>
-    <div class="kpi-sub">0 stores</div>
+    <div class="kpi-val">680</div>
+    <div class="kpi-sub">6 stores</div>
   </div><div class="kpi hi">
     <div class="kpi-label">With 1+ sale</div>
-    <div class="kpi-val">0</div>
-    <div class="kpi-sub">0.0% of window</div>
+    <div class="kpi-val">506</div>
+    <div class="kpi-sub">74.4% of window</div>
   </div><div class="kpi">
     <div class="kpi-label">Revenue (window designs)</div>
-    <div class="kpi-val">£0</div>
+    <div class="kpi-val">£237,632</div>
     <div class="kpi-sub">shown products only</div>
   </div><div class="kpi">
     <div class="kpi-label">Avg CVR (window)</div>
-    <div class="kpi-val">0.00%</div>
+    <div class="kpi-val">0.02%</div>
     <div class="kpi-sub">mean across products</div>
   </div><div class="kpi">
     <div class="kpi-label">% designs AI generated</div>
@@ -323,7 +323,7 @@
     <!-- DESIGNER TABLE -->
     <div class="section">
       <div class="sec-hdr">
-        <span class="sec-title">Designer performance <span id="desNote" style="font-weight:400;text-transform:none;opacity:.7">(0 designers with designs in window)</span></span>
+        <span class="sec-title">Designer performance <span id="desNote" style="font-weight:400;text-transform:none;opacity:.7">(12 designers with designs in window)</span></span>
         <span class="sec-note" id="windowNote"></span>
       </div>
       <div class="tcard">
@@ -359,7 +359,355 @@
               <th class="grp-opt-col" style="min-width:65px" onclick="dsrt(&#39;avgPcr&#39;)">Avg PCR <span class="sa" id="sa-avgPcr">▼</span></th>
             </tr>
           </thead>
-          <tbody id="dBody"><tr><td colspan="16" class="empty">No designers had designs created in this window.</td></tr></tbody>
+          <tbody id="dBody"><tr>
+      <td class="left"><span class="rank r1">1</span></td>
+      <td class="left">
+        <div style="font-weight:600;margin-bottom:3px">Lottie</div>
+        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Wallace &amp; Gromit</span> <span class="badge b-store">Wildlife Trusts</span></div>
+      </td>
+
+      <td class="grp-£-col">
+        <div class="rev-bar-wrap">
+          <span style="min-width:58px;font-weight:700;font-size:12px">£101,956</span>
+          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:100.0%"></div></div>
+        </div>
+      </td>
+      <td class="grp-£-col"><span class="ph">—</span></td>
+      <td class="grp-£-col" style="font-weight:600">£492.54</td>
+
+      <td class="grp-out-col">207</td>
+      <td class="grp-out-col"><span class="ph">—</span></td>
+      <td class="grp-out-col"><span class="badge b-green">82.1%</span></td>
+      <td class="grp-out-col">8.3</td>
+      <td class="grp-out-col">0.02%</td>
+
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+    </tr><tr>
+      <td class="left"><span class="rank r2">2</span></td>
+      <td class="left">
+        <div style="font-weight:600;margin-bottom:3px">SaraJane</div>
+        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">BBC Earth</span> <span class="badge b-store">Music Declares Emergency</span> <span class="badge b-store">Sea Shepherd Global</span> <span class="badge b-store">Shark Trust</span></div>
+      </td>
+
+      <td class="grp-£-col">
+        <div class="rev-bar-wrap">
+          <span style="min-width:58px;font-weight:700;font-size:12px">£51,602</span>
+          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:50.6%"></div></div>
+        </div>
+      </td>
+      <td class="grp-£-col"><span class="ph">—</span></td>
+      <td class="grp-£-col" style="font-weight:600">£400.01</td>
+
+      <td class="grp-out-col">129</td>
+      <td class="grp-out-col"><span class="ph">—</span></td>
+      <td class="grp-out-col"><span class="badge b-green">78.3%</span></td>
+      <td class="grp-out-col">5.2</td>
+      <td class="grp-out-col">0.01%</td>
+
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+    </tr><tr>
+      <td class="left"><span class="rank r3">3</span></td>
+      <td class="left">
+        <div style="font-weight:600;margin-bottom:3px">Phoebs</div>
+        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Wallace &amp; Gromit</span> <span class="badge b-store">Wildlife Trusts</span></div>
+      </td>
+
+      <td class="grp-£-col">
+        <div class="rev-bar-wrap">
+          <span style="min-width:58px;font-weight:700;font-size:12px">£44,890</span>
+          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:44.0%"></div></div>
+        </div>
+      </td>
+      <td class="grp-£-col"><span class="ph">—</span></td>
+      <td class="grp-£-col" style="font-weight:600">£748.17</td>
+
+      <td class="grp-out-col">60</td>
+      <td class="grp-out-col"><span class="ph">—</span></td>
+      <td class="grp-out-col"><span class="badge b-green">68.3%</span></td>
+      <td class="grp-out-col">2.4</td>
+      <td class="grp-out-col">0.02%</td>
+
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+    </tr><tr>
+      <td class="left"><span class="rank ">4</span></td>
+      <td class="left">
+        <div style="font-weight:600;margin-bottom:3px">SophieB</div>
+        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Music Declares Emergency</span> <span class="badge b-store">Sea Shepherd Global</span> <span class="badge b-store">Shark Trust</span></div>
+      </td>
+
+      <td class="grp-£-col">
+        <div class="rev-bar-wrap">
+          <span style="min-width:58px;font-weight:700;font-size:12px">£30,879</span>
+          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:30.3%"></div></div>
+        </div>
+      </td>
+      <td class="grp-£-col"><span class="ph">—</span></td>
+      <td class="grp-£-col" style="font-weight:600">£156.74</td>
+
+      <td class="grp-out-col">197</td>
+      <td class="grp-out-col"><span class="ph">—</span></td>
+      <td class="grp-out-col"><span class="badge b-green">66%</span></td>
+      <td class="grp-out-col">7.9</td>
+      <td class="grp-out-col">0.02%</td>
+
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+    </tr><tr>
+      <td class="left"><span class="rank ">5</span></td>
+      <td class="left">
+        <div style="font-weight:600;margin-bottom:3px">Rosie_H</div>
+        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">BBC Earth</span> <span class="badge b-store">Wallace &amp; Gromit</span> <span class="badge b-store">Wildlife Trusts</span></div>
+      </td>
+
+      <td class="grp-£-col">
+        <div class="rev-bar-wrap">
+          <span style="min-width:58px;font-weight:700;font-size:12px">£4,123</span>
+          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:4.0%"></div></div>
+        </div>
+      </td>
+      <td class="grp-£-col"><span class="ph">—</span></td>
+      <td class="grp-£-col" style="font-weight:600">£82.45</td>
+
+      <td class="grp-out-col">50</td>
+      <td class="grp-out-col"><span class="ph">—</span></td>
+      <td class="grp-out-col"><span class="badge b-green">72%</span></td>
+      <td class="grp-out-col">2</td>
+      <td class="grp-out-col">0.02%</td>
+
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+    </tr><tr>
+      <td class="left"><span class="rank ">6</span></td>
+      <td class="left">
+        <div style="font-weight:600;margin-bottom:3px">genevieve</div>
+        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Shark Trust</span></div>
+      </td>
+
+      <td class="grp-£-col">
+        <div class="rev-bar-wrap">
+          <span style="min-width:58px;font-weight:700;font-size:12px">£1,253</span>
+          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:1.2%"></div></div>
+        </div>
+      </td>
+      <td class="grp-£-col"><span class="ph">—</span></td>
+      <td class="grp-£-col" style="font-weight:600">£65.96</td>
+
+      <td class="grp-out-col">19</td>
+      <td class="grp-out-col"><span class="ph">—</span></td>
+      <td class="grp-out-col"><span class="badge b-green">84.2%</span></td>
+      <td class="grp-out-col">0.8</td>
+      <td class="grp-out-col">0.03%</td>
+
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+    </tr><tr>
+      <td class="left"><span class="rank ">7</span></td>
+      <td class="left">
+        <div style="font-weight:600;margin-bottom:3px">Robbie</div>
+        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">BBC Earth</span></div>
+      </td>
+
+      <td class="grp-£-col">
+        <div class="rev-bar-wrap">
+          <span style="min-width:58px;font-weight:700;font-size:12px">£1,229</span>
+          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:1.2%"></div></div>
+        </div>
+      </td>
+      <td class="grp-£-col"><span class="ph">—</span></td>
+      <td class="grp-£-col" style="font-weight:600">£307.27</td>
+
+      <td class="grp-out-col">4</td>
+      <td class="grp-out-col"><span class="ph">—</span></td>
+      <td class="grp-out-col"><span class="badge b-green">75%</span></td>
+      <td class="grp-out-col">0.2</td>
+      <td class="grp-out-col">0.02%</td>
+
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+    </tr><tr>
+      <td class="left"><span class="rank ">8</span></td>
+      <td class="left">
+        <div style="font-weight:600;margin-bottom:3px">SarahK</div>
+        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Shark Trust</span> <span class="badge b-store">Wildlife Trusts</span></div>
+      </td>
+
+      <td class="grp-£-col">
+        <div class="rev-bar-wrap">
+          <span style="min-width:58px;font-weight:700;font-size:12px">£682</span>
+          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:0.7%"></div></div>
+        </div>
+      </td>
+      <td class="grp-£-col"><span class="ph">—</span></td>
+      <td class="grp-£-col" style="font-weight:600">£97.40</td>
+
+      <td class="grp-out-col">7</td>
+      <td class="grp-out-col"><span class="ph">—</span></td>
+      <td class="grp-out-col"><span class="badge b-green">71.4%</span></td>
+      <td class="grp-out-col">0.3</td>
+      <td class="grp-out-col">0.02%</td>
+
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+    </tr><tr>
+      <td class="left"><span class="rank ">9</span></td>
+      <td class="left">
+        <div style="font-weight:600;margin-bottom:3px">CPADZ</div>
+        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">BBC Earth</span></div>
+      </td>
+
+      <td class="grp-£-col">
+        <div class="rev-bar-wrap">
+          <span style="min-width:58px;font-weight:700;font-size:12px">£393</span>
+          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:0.4%"></div></div>
+        </div>
+      </td>
+      <td class="grp-£-col"><span class="ph">—</span></td>
+      <td class="grp-£-col" style="font-weight:600">£392.50</td>
+
+      <td class="grp-out-col">1</td>
+      <td class="grp-out-col"><span class="ph">—</span></td>
+      <td class="grp-out-col"><span class="badge b-green">100%</span></td>
+      <td class="grp-out-col">0</td>
+      <td class="grp-out-col">0.02%</td>
+
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+    </tr><tr>
+      <td class="left"><span class="rank ">10</span></td>
+      <td class="left">
+        <div style="font-weight:600;margin-bottom:3px">GBro</div>
+        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Sea Shepherd Global</span></div>
+      </td>
+
+      <td class="grp-£-col">
+        <div class="rev-bar-wrap">
+          <span style="min-width:58px;font-weight:700;font-size:12px">£316</span>
+          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:0.3%"></div></div>
+        </div>
+      </td>
+      <td class="grp-£-col"><span class="ph">—</span></td>
+      <td class="grp-£-col" style="font-weight:600">£316.40</td>
+
+      <td class="grp-out-col">1</td>
+      <td class="grp-out-col"><span class="ph">—</span></td>
+      <td class="grp-out-col"><span class="badge b-green">100%</span></td>
+      <td class="grp-out-col">0</td>
+      <td class="grp-out-col">0.00%</td>
+
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+    </tr><tr>
+      <td class="left"><span class="rank ">11</span></td>
+      <td class="left">
+        <div style="font-weight:600;margin-bottom:3px">SarahP</div>
+        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Sea Shepherd Global</span></div>
+      </td>
+
+      <td class="grp-£-col">
+        <div class="rev-bar-wrap">
+          <span style="min-width:58px;font-weight:700;font-size:12px">£310</span>
+          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:0.3%"></div></div>
+        </div>
+      </td>
+      <td class="grp-£-col"><span class="ph">—</span></td>
+      <td class="grp-£-col" style="font-weight:600">£155.00</td>
+
+      <td class="grp-out-col">2</td>
+      <td class="grp-out-col"><span class="ph">—</span></td>
+      <td class="grp-out-col"><span class="badge b-green">100%</span></td>
+      <td class="grp-out-col">0.1</td>
+      <td class="grp-out-col">0.04%</td>
+
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+    </tr><tr>
+      <td class="left"><span class="rank ">12</span></td>
+      <td class="left">
+        <div style="font-weight:600;margin-bottom:3px">Unknown</div>
+        <div style="display:flex;flex-wrap:wrap;gap:3px"><span class="badge b-store">Shark Trust</span></div>
+      </td>
+
+      <td class="grp-£-col">
+        <div class="rev-bar-wrap">
+          <span style="min-width:58px;font-weight:700;font-size:12px">£0</span>
+          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:0.0%"></div></div>
+        </div>
+      </td>
+      <td class="grp-£-col"><span class="ph">—</span></td>
+      <td class="grp-£-col" style="font-weight:600">£0.00</td>
+
+      <td class="grp-out-col">3</td>
+      <td class="grp-out-col"><span class="ph">—</span></td>
+      <td class="grp-out-col"><span class="badge b-red">0%</span></td>
+      <td class="grp-out-col">0.1</td>
+      <td class="grp-out-col">0.00%</td>
+
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+      <td class="grp-kp-col"><span class="ph">—</span></td>
+
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+      <td class="grp-opt-col"><span class="badge b-red">0%</span></td>
+      <td class="grp-opt-col"><span class="ph">—</span></td>
+    </tr></tbody>
         </table>
       </div>
       <p class="foot-note">— = data not yet available in export &nbsp;·&nbsp; Window filters designs by creation date &nbsp;·&nbsp; Data loads live from Google Sheets</p>
@@ -418,7 +766,7 @@ let allProducts = []; // [{store, designer, revenue, sales, cr, traffic, basketR
 let loadedStores = new Set();
 let failedStores = new Map();
 
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxHoN01PkMArLcU0jKcbMM32_0_QGprjjk5h8ie2H-HuJM_JP5_9tiXz_fPj1DD3UZo/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwEKxUtKhklcqoy6RLQHWIQ5KA8vqVsCtze0x-h4yG518gSD9ChO6a99kaqnsUL0--s/exec";
 
 function sheetUrl(sheet) {
   return `${APPS_SCRIPT_URL}?sheet=${encodeURIComponent(sheet)}`;
