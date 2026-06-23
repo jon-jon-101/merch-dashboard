@@ -231,6 +231,64 @@
   .vip-child:hover td { background:rgba(124,58,237,0.05) !important; }
   .store-indent { color:var(--text2); font-size:11px; }
 
+  /* ── SUMMARY PANELS ── */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 1.25rem;
+  }
+  .summary-panel {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 1rem;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .summary-panel.wide {
+    grid-column: span 2;
+  }
+  .summary-panel-label {
+    font-size: 10px; font-weight: 600; color: var(--text2);
+    text-transform: uppercase; letter-spacing: .05em;
+  }
+  .summary-panel-val {
+    font-size: 26px; font-weight: 700; color: var(--text); line-height: 1.1;
+  }
+  .summary-panel-sub {
+    font-size: 11px; color: var(--text3);
+  }
+  .summary-panel.hi { border-color: var(--blue); background: var(--blue-bg); }
+  .summary-panel.hi .summary-panel-val { color: var(--blue-txt); }
+  .summary-panel.hi .summary-panel-label { color: var(--blue-txt); }
+  .summary-panel.green { border-color: #86EFAC; background: var(--green-bg); }
+  .summary-panel.green .summary-panel-val { color: var(--green-txt); }
+  .summary-panel.green .summary-panel-label { color: var(--green-txt); }
+  .donut-row { display: flex; align-items: center; gap: 12px; margin-top: 4px; }
+  .donut-wrap { position: relative; width: 80px; height: 80px; flex-shrink: 0; }
+  .donut-wrap canvas { width: 80px !important; height: 80px !important; }
+  .donut-legend { display: flex; flex-direction: column; gap: 5px; font-size: 11px; }
+  .donut-legend-item { display: flex; align-items: center; gap: 5px; }
+  .donut-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .summary-cols {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 1.25rem;
+  }
+  .summary-cols-wide {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 2fr;
+    gap: 10px;
+    margin-bottom: 1.25rem;
+  }
+
+  /* ── TOP PRODUCTS TABLE ── */
+  .ptbl { width:100%; border-collapse:collapse; font-size:11px; }
+  .ptbl th { background:var(--bg); color:var(--text2); font-weight:600; padding:6px 10px; text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:.04em; border-bottom:1px solid var(--border); cursor:pointer; white-space:nowrap; }
+  .ptbl th:hover { color:var(--text); }
+  .ptbl td { padding:7px 10px; border-bottom:1px solid var(--border); color:var(--text); font-size:11px; }
+  .ptbl tr:last-child td { border-bottom:none; }
+  .ptbl tr:hover td { background:var(--bg); }
+
   /* ── EMPTY STATE ── */
   .empty { padding: 2.5rem; text-align: center; color: var(--text3); font-size: 13px; }
 
@@ -321,8 +379,10 @@
       <span id="statusText">Loading data from Google Sheets…</span>
     </div>
 
-    <!-- KPI ROW -->
-    <div class="kpi-grid" id="kpiGrid"></div>
+    <!-- SUMMARY -->
+    <div id="summarySection">
+      <div class="summary-cols" id="summaryKP" style="grid-template-columns:repeat(3,1fr);margin-bottom:1.25rem"></div>
+    </div>
 
     <!-- STORE TABLE -->
     <div class="section">
@@ -404,6 +464,35 @@
         </table>
       </div>
       <p class="foot-note">— = data not yet available in export &nbsp;·&nbsp; Window filters designs by creation date &nbsp;·&nbsp; Data loads live from Google Sheets</p>
+    </div>
+
+    <!-- TOP 10 PRODUCTS -->
+    <div class="section">
+      <div class="sec-hdr">
+        <span class="sec-title">Top 10 products by revenue <span id="topNote" style="font-weight:400;text-transform:none;opacity:.7"></span></span>
+      </div>
+      <div class="tcard">
+        <table class="ptbl">
+          <thead>
+            <tr>
+              <th style="width:3%">#</th>
+              <th style="width:28%" onclick="psrt('name')">Product <span class="sa" id="psa-name">▼</span></th>
+              <th style="width:12%" onclick="psrt('store')">Store <span class="sa" id="psa-store">▼</span></th>
+              <th style="width:10%" onclick="psrt('designer')">Designer <span class="sa" id="psa-designer">▼</span></th>
+              <th style="width:12%" onclick="psrt('revenue')">Revenue <span class="sa on" id="psa-revenue">▼</span></th>
+              <th style="width:7%"  onclick="psrt('sales')">Units <span class="sa" id="psa-sales">▼</span></th>
+              <th style="width:8%"  onclick="psrt('cr')">CVR% <span class="sa" id="psa-cr">▼</span></th>
+              <th style="width:8%"  onclick="psrt('basketRate')">Basket% <span class="sa" id="psa-basketRate">▼</span></th>
+              <th style="width:8%"  onclick="psrt('traffic')">Traffic <span class="sa" id="psa-traffic">▼</span></th>
+              <th style="width:10%" onclick="psrt('createdAt')">Created <span class="sa" id="psa-createdAt">▼</span></th>
+            </tr>
+          </thead>
+          <tbody id="pBody">
+            <tr><td colspan="10" class="empty">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="foot-note">Showing top 10 by revenue within the active window and filters</p>
     </div>
 
   </div><!-- /main -->
@@ -667,26 +756,19 @@ function updateWindowBadge() {
     `📅 ${isYTD ? "Year to date — " : ""}${fmt(from)} → ${fmt(to)}`;
 }
 
-function renderKPIs(products) {
-  const totalDesigns  = products.length;
-  const withSales     = products.filter(p => p.sales > 0).length;
-  const totalRev      = products.reduce((a, p) => a + p.revenue, 0);
-  const pctSales      = totalDesigns ? ((withSales / totalDesigns) * 100).toFixed(1) : "0.0";
-  const avgCvr        = totalDesigns ? (products.reduce((a, p) => a + p.cr, 0) / totalDesigns).toFixed(2) : "0.00";
-  const storeF        = document.getElementById("fStore").value;
-  const storeLabel    = storeF === "all" ? `${loadedStores.size} stores` : storeF;
+function phPanel(label, sub) {
+  return `<div class="summary-panel">
+    <div class="summary-panel-label">${label}</div>
+    <div class="summary-panel-val" style="font-size:20px;color:var(--text3);font-style:italic">—</div>
+    <div class="summary-panel-sub">${sub}</div>
+  </div>`;
+}
 
-  document.getElementById("kpiGrid").innerHTML = [
-    { l: "Designs in window",       v: totalDesigns.toLocaleString(), s: storeLabel, hi: true },
-    { l: "With 1+ sale",            v: withSales.toLocaleString(),    s: `${pctSales}% of window`, hi: true },
-    { l: "Revenue (window designs)",v: "£" + Math.round(totalRev).toLocaleString(), s: "shown products only" },
-    { l: "Avg CVR (window)",        v: avgCvr + "%", s: "mean across products" },
-    { l: "% designs AI generated",  v: "—", s: "column not yet in sheet", ph: true },
-  ].map(m => `<div class="kpi${m.hi ? " hi" : ""}">
-    <div class="kpi-label">${m.l}</div>
-    <div class="kpi-val${m.ph ? '" style="font-size:16px;color:var(--text3);font-style:italic' : ''}">${m.v}</div>
-    <div class="kpi-sub">${m.s}</div>
-  </div>`).join("");
+function renderSummary(products) {
+  document.getElementById("summaryKP").innerHTML =
+    phPanel("£ monthly opp remaining", "add to sheet") +
+    phPanel("% opps complete", "add to sheet") +
+    phPanel("Time to complete", "add to sheet");
 }
 
 // ── STORE SORT STATE ────────────────────────────────
@@ -988,12 +1070,69 @@ function renderTable(products) {
   document.getElementById("dBody").innerHTML = rowsHtml + toggleRow;
 }
 
+// ── TOP PRODUCTS ────────────────────────────────────
+let pSortCol = "revenue";
+let pSortDir = -1;
+
+function psrt(col) {
+  if (pSortCol === col) pSortDir *= -1;
+  else { pSortCol = col; pSortDir = -1; }
+  document.querySelectorAll("[id^='psa-']").forEach(el => { el.className = "sa"; el.textContent = "▼"; });
+  const el = document.getElementById("psa-" + col);
+  if (el) { el.className = "sa on"; el.textContent = pSortDir === -1 ? "▼" : "▲"; }
+  renderTopProducts(getFilteredProducts());
+}
+
+function renderTopProducts(products) {
+  const sorted = [...products].sort((a, b) => {
+    let av = a[pSortCol], bv = b[pSortCol];
+    if (typeof av === "string") return pSortDir * av.localeCompare(bv);
+    return pSortDir * (av - bv);
+  }).slice(0, 10);
+
+  document.getElementById("topNote").textContent =
+    `(${Math.min(10, products.length)} of ${products.length.toLocaleString()} products in window)`;
+
+  if (sorted.length === 0) {
+    document.getElementById("pBody").innerHTML =
+      `<tr><td colspan="10" class="empty">No products found in this window.</td></tr>`;
+    return;
+  }
+
+  const maxRev = Math.max(...sorted.map(p => p.revenue), 1);
+  const pctBadge = (v, hi=5, lo=2) =>
+    `<span class="badge ${v>=hi?"b-green":v>=lo?"b-amber":"b-red"}">${v.toFixed(1)}%</span>`;
+
+  document.getElementById("pBody").innerHTML = sorted.map((p, i) => {
+    const rankCls = i===0?"r1":i===1?"r2":i===2?"r3":"";
+    const revPct  = (p.revenue / maxRev * 100).toFixed(1);
+    return `<tr>
+      <td><span class="rank ${rankCls}">${i+1}</span></td>
+      <td style="font-weight:600;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${p.name}">${p.name}</td>
+      <td><span class="badge b-store">${p.store}</span></td>
+      <td style="color:var(--text2)">${p.designer}</td>
+      <td>
+        <div class="rev-bar-wrap">
+          <span style="min-width:52px;font-weight:700">£${Math.round(p.revenue).toLocaleString()}</span>
+          <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:${revPct}%"></div></div>
+        </div>
+      </td>
+      <td>${p.sales.toLocaleString()}</td>
+      <td>${pctBadge(p.cr)}</td>
+      <td>${p.basketRate.toFixed(1)}%</td>
+      <td>${p.traffic.toLocaleString()}</td>
+      <td style="color:var(--text2);font-size:10px">${p.createdAt}</td>
+    </tr>`;
+  }).join("");
+}
+
 function render() {
   updateWindowBadge();
   const products = getFilteredProducts();
-  renderKPIs(products);
+  renderSummary(products);
   renderStoreTable(products);
   renderTable(products);
+  renderTopProducts(products);
 }
 
 // ══════════════════════════════════════════════════════
